@@ -1,0 +1,25 @@
+{
+  "environment": "development",
+
+  "server": {
+    "logFormat": "dev",
+    "port": 3000,
+    "baseUrl": "http://localhost:3000"
+  },
+
+  "database": {
+    "dialect": "sqlite",
+    "database": "trivial",
+
+    "operatorsAliases": false
+  },
+
+  "log": {
+    "level": "silly",
+    "labels": [
+      "default",
+      "server",
+      "db"
+    ]
+  }
+}

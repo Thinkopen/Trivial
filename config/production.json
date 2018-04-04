@@ -1,0 +1,16 @@
+{
+  "environment": "production",
+
+  "server": {
+    "logFormat": "combined",
+    "baseUrl": "https://top-trivial.herokuapp.com"
+  },
+
+  "database": {
+    "dialect": "postgres"
+  },
+
+  "log": {
+    "level": "info"
+  }
+}

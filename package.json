@@ -1,0 +1,48 @@
+{
+  "name": "top-trivial",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thinkopen/Trivial.git"
+  },
+  "keywords": [
+    "nodejs",
+    "trivial",
+    "socket"
+  ],
+  "author": "Thinkopen s.r.l. <github@thinkopen.it>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Thinkopen/Trivial/issues"
+  },
+  "homepage": "https://github.com/Thinkopen/Trivial#readme",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "jest": "^22.4.3",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "config": "^1.30.0",
+    "express": "^4.16.3",
+    "moment": "^2.22.0",
+    "morgan": "^1.9.0",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-jwt": "^4.0.0",
+    "pg": "^7.4.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.37.5",
+    "sqlite3": "^4.0.0",
+    "winston": "^2.4.1"
+  }
+}
