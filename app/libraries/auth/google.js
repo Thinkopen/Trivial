@@ -1,4 +1,5 @@
 const config = require('config');
+const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const User = require('../../models/user');
@@ -7,18 +8,15 @@ class GoogleAuth {
   constructor() {
     this.scopes = ['profile', 'email'];
 
-    this.strategy = new GoogleStrategy({
-      clientID: config.get('google.clientId'),
-      clientSecret: config.get('google.clientSecret'),
-      callbackURL: `${config.get('server.baseUrl')}${config.get('google.callbackUrl')}`,
-    }, async (accessToken, refreshToken, profile, callback) => {
-      const authObj = await this.createAuthObj(profile);
+    const strategy = new GoogleStrategy({
+      clientID: config.get('auth.google.clientId'),
+      clientSecret: config.get('auth.google.clientSecret'),
+      callbackURL: `${config.get('server.baseUrl')}${config.get('auth.google.callbackUrl')}`,
+    }, async (accessToken, refreshToken, profile, done) => this.createAuthObj(profile)
+      .then(user => done(null, user))
+      .catch(error => done(error)));
 
-      callback(null, {
-        accessToken,
-        ...authObj,
-      });
-    });
+    passport.use(strategy);
   }
 
   async createAuthObj(profile) {
