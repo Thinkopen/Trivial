@@ -26,7 +26,8 @@ async function sync(options) {
     .readdirSync(modelsFolder)
     .filter(filename => filename !== 'index.js' && filename.substr(-3) === '.js')
     // eslint-disable-next-line import/no-dynamic-require, global-require
-    .forEach(filename => require(path.join(modelsFolder, filename)));
+    .map(filename => require(path.join(modelsFolder, filename)))
+    .map(Model => Model.associate && Model.associate());
 
   return sequelize.sync(options);
 }

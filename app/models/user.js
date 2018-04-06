@@ -1,6 +1,6 @@
 const { Sequelize, sequelize } = require('../libraries/db');
 
-const Model = sequelize.define('user', {
+const User = sequelize.define('user', {
   id: {
     type: Sequelize.UUID,
     primaryKey: true,
@@ -20,6 +20,18 @@ const Model = sequelize.define('user', {
       isEmail: true,
     },
   },
+
+  admin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
-module.exports = Model;
+User.associate = function associate() {
+  const Room = require('./room');
+  const RoomUser = require('./roomUser');
+
+  User.belongsToMany(Room, { through: RoomUser });
+};
+
+module.exports = User;

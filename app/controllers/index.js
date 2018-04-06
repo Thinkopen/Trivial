@@ -4,7 +4,8 @@ const express = require('express');
 const log = require('../libraries/log');
 
 class AbstractController {
-  constructor() {
+  constructor(io) {
+    this.io = io;
     this.router = express.Router();
 
     this.initRouter();

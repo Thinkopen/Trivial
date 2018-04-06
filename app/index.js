@@ -5,6 +5,7 @@ const config = require('config');
 const crypto = require('crypto');
 const morgan = require('morgan');
 const express = require('express');
+const socket = require('socket.io');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 
@@ -23,6 +24,7 @@ class TrivialApp {
   initServer() {
     this.app = express();
     this.server = http.Server(this.app);
+    this.io = socket(this.server);
 
     this.server.on('error', error => TrivialApp.handleServerError(error));
 
@@ -87,7 +89,7 @@ class TrivialApp {
         // eslint-disable-next-line global-require, import/no-dynamic-require
         const Controller = require(controllerFile);
 
-        this.app.use(urlPath, new Controller().router);
+        this.app.use(urlPath, new Controller(this.io).router);
       });
   }
 
