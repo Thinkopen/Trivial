@@ -13,6 +13,7 @@ const Answer = sequelize.define('answer', {
 
   correct: {
     type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
 });
 
