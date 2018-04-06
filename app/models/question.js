@@ -2,6 +2,27 @@ const parse = require('csv-parse/lib/sync');
 
 const { Sequelize, sequelize } = require('../libraries/db');
 
+function shuffle(array) {
+  let currentIndex = array.length;
+  let temporaryValue;
+  let randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+
+    array[currentIndex] = array[randomIndex]; // eslint-disable-line no-param-reassign
+    array[randomIndex] = temporaryValue; // eslint-disable-line no-param-reassign
+  }
+
+  return array;
+}
+
 const Question = sequelize.define('question', {
   id: {
     type: Sequelize.UUID,
@@ -13,6 +34,17 @@ const Question = sequelize.define('question', {
     type: Sequelize.TEXT,
   },
 });
+
+const oldToJSON = Question.prototype.toJSON;
+Question.prototype.toJSON = function toJSON() {
+  const question = oldToJSON.call(this);
+
+  if (question.answers) {
+    question.answers = shuffle(question.answers);
+  }
+
+  return question;
+};
 
 Question.importFromCsv = async function importFromCsv(csv) {
   const questionsArr = parse(csv);

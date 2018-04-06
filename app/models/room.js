@@ -20,6 +20,12 @@ const Room = sequelize.define('room', {
   },
 });
 
+Room.prototype.setStarted = async function setStarted() {
+  this.startedAt = new Date();
+
+  return this.save();
+};
+
 Room.associate = function associate() {
   const Question = require('./question');
   const RoomQuestion = require('./roomQuestion');

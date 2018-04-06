@@ -21,5 +21,9 @@
       "server",
       "db"
     ]
+  },
+
+  "quiz": {
+    "nextQuestionTimeout": 30000
   }
 }
