@@ -4,31 +4,26 @@ const App = require('../../../app');
 
 const Room = require('../../../app/models/room');
 
+const app = new App();
+
 const baseUrl = '/rooms';
 const activeUrl = `${baseUrl}/active`;
 
 describe('Controllers -> Room', () => {
-  let app;
-
   let room;
 
-  beforeAll(() => {
-    app = new App();
+  beforeEach(() => app.listen()
+    .then(async () => {
+      room = await Room.create();
+    }));
 
-    return app.listen();
-  });
-
-  beforeEach(async () => {
-    room = await Room.create();
-  });
-
-  afterAll(() => app.close());
+  afterEach(() => app.close());
 
   test('it should return the non started room', () => request(app.app)
     .get(activeUrl)
     .expect(200)
-    .then(({ body }) => {
-      expect(body).toHaveProperty('id', room.id);
+    .then(({ body: theRoom }) => {
+      expect(theRoom).toHaveProperty('id', room.id);
     })
     .then(() => Room.findAll())
     .then(rooms => expect(rooms).toHaveLength(1)));
@@ -37,9 +32,9 @@ describe('Controllers -> Room', () => {
     .then(() => request(app.app)
       .get(activeUrl)
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toHaveProperty('id');
-        expect(body.id).not.toBe(room.id);
+      .then(({ body: theRoom }) => {
+        expect(theRoom).toHaveProperty('id');
+        expect(theRoom.id).not.toBe(room.id);
       }))
     .then(() => Room.findAll())
     .then(rooms => expect(rooms).toHaveLength(1)));
@@ -48,9 +43,9 @@ describe('Controllers -> Room', () => {
     .then(() => request(app.app)
       .get(activeUrl)
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toHaveProperty('id');
-        expect(body.id).not.toBe(room.id);
+      .then(({ body: theRoom }) => {
+        expect(theRoom).toHaveProperty('id');
+        expect(theRoom.id).not.toBe(room.id);
       }))
     .then(() => Room.findAll())
     .then(rooms => expect(rooms).toHaveLength(2)));

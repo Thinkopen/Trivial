@@ -29,7 +29,13 @@ async function sync(options) {
     .map(filename => require(path.join(modelsFolder, filename)))
     .map(Model => Model.associate && Model.associate());
 
-  return sequelize.sync(options);
+  const syncOptions = options || {};
+
+  if (config.get('environment') === 'test') {
+    syncOptions.force = true;
+  }
+
+  return sequelize.sync(syncOptions);
 }
 
 module.exports = { Sequelize, sequelize, sync };

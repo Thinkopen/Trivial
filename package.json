@@ -55,5 +55,12 @@
     "socketio-jwt-auth": "^0.0.6",
     "sqlite3": "^4.0.0",
     "winston": "^2.4.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "testUtils"
+    ]
   }
 }
