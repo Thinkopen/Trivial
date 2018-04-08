@@ -1,4 +1,5 @@
 const config = require('config');
+const jwtAuth = require('socketio-jwt-auth');
 
 const { sequelize } = require('../../libraries/db');
 
@@ -6,6 +7,7 @@ const Answer = require('../../models/answer');
 const Question = require('../../models/question');
 const Room = require('../../models/room');
 const RoomQuestion = require('../../models/roomQuestion');
+const User = require('../../models/user');
 
 const AbstractController = require('..');
 
@@ -115,8 +117,25 @@ class SocketQuiz {
 
 class SocketQuizController extends AbstractController {
   initRouter() {
-    this.io.of(SocketQuiz.roomNameRegex)
-      .on('connect', socket => SocketQuiz.getInstance(socket).handleConnect(socket));
+    const room = this.io.of(SocketQuiz.roomNameRegex);
+
+    room.use(jwtAuth.authenticate({
+      secret: config.get('auth.jwt.secret'),
+    }, SocketQuizController.handleJwt));
+
+    room.on('connect', socket => SocketQuiz.getInstance(socket).handleConnect(socket));
+  }
+
+  static handleJwt(payload, done) {
+    User.findOne({ where: { id: payload.sub } })
+      .then((user) => {
+        if (!user) {
+          return done(null, false, 'user does not exist');
+        }
+
+        return done(null, user);
+      })
+      .catch(error => done(error));
   }
 }
 

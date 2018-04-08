@@ -8,6 +8,4 @@ const RoomUser = sequelize.define('roomUser', {
   },
 });
 
-RoomUser.associate = function associate() {};
-
 module.exports = RoomUser;

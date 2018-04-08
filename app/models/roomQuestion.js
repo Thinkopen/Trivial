@@ -12,6 +12,4 @@ const RoomQuestion = sequelize.define('roomQuestion', {
   },
 });
 
-RoomQuestion.associate = function associate() {};
-
 module.exports = RoomQuestion;

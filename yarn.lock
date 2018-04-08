@@ -2698,6 +2698,10 @@ jws@^3.1.4:
     jwa "^1.1.4"
     safe-buffer "^5.0.1"
 
+jwt-simple@^0.5:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/jwt-simple/-/jwt-simple-0.5.1.tgz#79ea01891b61de6b68e13e67c0b4b5bda937b294"
+
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
@@ -4093,6 +4097,13 @@ socket.io@^2.1.0:
     socket.io-adapter "~1.1.0"
     socket.io-client "2.1.0"
     socket.io-parser "~3.2.0"
+
+socketio-jwt-auth@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/socketio-jwt-auth/-/socketio-jwt-auth-0.0.6.tgz#4778f1644a011eb6d8931865ec5ccad7dfd961ec"
+  dependencies:
+    jwt-simple "^0.5"
+    xtend "^4.0.0"
 
 source-map-resolve@^0.5.0:
   version "0.5.1"
