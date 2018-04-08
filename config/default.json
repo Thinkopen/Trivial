@@ -25,5 +25,11 @@
 
   "quiz": {
     "nextQuestionTimeout": 30000
+  },
+
+  "auth": {
+    "jwt": {
+      "secret": "secret123"
+    }
   }
 }

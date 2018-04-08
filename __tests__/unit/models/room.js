@@ -25,4 +25,10 @@ describe('Models -> Room', () => {
     expect(Room).toHaveProperty('prototype.setStarted');
     expect(Room.prototype.setStarted).toBeInstanceOf(Function);
   });
+
+  describe('Custom methods', () => {
+    test('it should set the started date', () => Room.create()
+      .then(room => room.setStarted())
+      .then(room => expect(room.startedAt).toBeTruthy()));
+  });
 });
