@@ -1,4 +1,7 @@
+const jwt = require('../libraries/auth/jwt');
 const facebook = require('../libraries/social/facebook');
+
+const User = require('../models/user');
 
 const AbstractController = require('.');
 
@@ -21,9 +24,22 @@ class AuthController extends AbstractController {
         throw new Error('Invalid token');
       }
 
-      const me = social.getMe(token);
+      const userRaw = await social.getMe(token);
 
-      response.json({ token, isValid });
+      const [user] = await User.findCreateFind({
+        where: {
+          email: userRaw.email,
+        },
+      });
+
+      user.name = user.name || userRaw.name;
+      user.picture = user.picture || userRaw.picture;
+
+      await user.save();
+
+      const jwtToken = jwt.generateJwt(user);
+
+      response.json({ user, token: jwtToken });
     };
   }
 }

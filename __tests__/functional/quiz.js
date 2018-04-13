@@ -36,8 +36,8 @@ describe('Functional -> Quiz', () => {
       User.create({ name: 'admin', email: 'admin@bar.com', admin: true }),
     ]))
     .then(([user, admin]) => {
-      const tokenUser = jwt.sign(user.toJSON(), config.get('auth.jwt.secret'));
-      const tokenAdmin = jwt.sign(admin.toJSON(), config.get('auth.jwt.secret'));
+      const tokenUser = jwt.sign(user.toJSON(), config.get('jwt.secret'));
+      const tokenAdmin = jwt.sign(admin.toJSON(), config.get('jwt.secret'));
 
       ioOptionsUser = {
         ...ioOptions,
@@ -102,7 +102,7 @@ describe('Functional -> Quiz', () => {
   }));
 
   test('it should fail if auth token of non existing user', () => new Promise((resolve, reject) => {
-    ioOptionsUser.query = `auth_token=${jwt.sign({ id: 'aaa' }, config.get('auth.jwt.secret'))}`;
+    ioOptionsUser.query = `auth_token=${jwt.sign({ id: 'aaa' }, config.get('jwt.secret'))}`;
 
     connectClient('room-aaa', ioOptionsUser);
 

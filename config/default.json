@@ -29,10 +29,9 @@
     "nextQuestionTimeout": 30000
   },
 
-  "auth": {
-    "jwt": {
-      "secret": "secret123"
-    }
+  "jwt": {
+    "expiresIn": 3600,
+    "secret": "secret123"
   },
 
   "facebook": {

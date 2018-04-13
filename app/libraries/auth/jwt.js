@@ -7,7 +7,8 @@ const User = require('../../models/user');
 
 class JwtAuth {
   constructor() {
-    this.secretOrKey = config.get('auth.jwt.secret');
+    this.expiresIn = config.get('jwt.expiresIn');
+    this.secretOrKey = config.get('jwt.secret');
 
     const strategy = new Strategy({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -25,13 +26,10 @@ class JwtAuth {
     return user;
   }
 
-  generateJwt(userId) {
-    const token = jwt.sign({}, this.secretOrKey, {
+  generateJwt(user) {
+    return jwt.sign(user instanceof User ? user.toJSON() : user, this.secretOrKey, {
       expiresIn: this.expiresIn,
-      subject: userId,
     });
-
-    return token;
   }
 }
 

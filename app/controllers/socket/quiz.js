@@ -120,7 +120,7 @@ class SocketQuizController extends AbstractController {
     const room = this.io.of(SocketQuiz.roomNameRegex);
 
     room.use(jwtAuth.authenticate({
-      secret: config.get('auth.jwt.secret'),
+      secret: config.get('jwt.secret'),
     }, SocketQuizController.handleJwt));
 
     room.on('connect', socket => SocketQuiz.getInstance(socket).handleConnect(socket));

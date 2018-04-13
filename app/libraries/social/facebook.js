@@ -7,7 +7,7 @@ class Facebook extends AbstractSocial {
   constructor() {
     super();
 
-    this.version = 'v2.11';
+    this.version = 'v2.12';
     this.baseUrl = `https://graph.facebook.com/${this.version}`;
 
     this.clientId = config.get('facebook.clientId');
@@ -19,7 +19,25 @@ class Facebook extends AbstractSocial {
   }
 
   async getMe(accessToken) {
-    return this.send('me', {}, accessToken);
+    const {
+      id,
+      name,
+      email,
+      picture: {
+        data: {
+          url: picture,
+        },
+      },
+    } = await this.send('me', {
+      fields: 'id,name,picture,email',
+    }, accessToken);
+
+    return {
+      id,
+      name,
+      email,
+      picture,
+    };
   }
 
   async validateToken(userToken) {

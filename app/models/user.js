@@ -21,6 +21,13 @@ const User = sequelize.define('user', {
     },
   },
 
+  picture: {
+    type: Sequelize.TEXT,
+    validate: {
+      isUrl: true,
+    },
+  },
+
   admin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,

@@ -107,7 +107,7 @@ class TrivialApp {
   }
 
   async listen() {
-    await sync();
+    await sync({ alter: true });
     log.silly('Database synced');
 
     await new Promise((resolve, reject) =>
