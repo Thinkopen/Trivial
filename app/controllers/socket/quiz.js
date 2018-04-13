@@ -127,7 +127,7 @@ class SocketQuizController extends AbstractController {
   }
 
   static handleJwt(payload, done) {
-    User.findOne({ where: { id: payload.sub } })
+    User.findOne({ where: { id: payload.id } })
       .then((user) => {
         if (!user) {
           return done(null, false, 'user does not exist');

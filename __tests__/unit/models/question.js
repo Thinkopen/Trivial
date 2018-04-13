@@ -24,5 +24,8 @@ describe('Models -> Question', () => {
   test('it should have the right custom static methods', () => {
     expect(Question).toHaveProperty('importFromCsv');
     expect(Question.importFromCsv).toBeInstanceOf(Function);
+
+    expect(Question).toHaveProperty('importFromArr');
+    expect(Question.importFromArr).toBeInstanceOf(Function);
   });
 });

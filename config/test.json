@@ -11,5 +11,9 @@
 
   "log": {
     "level": "error"
+  },
+
+  "quiz": {
+    "nextQuestionTimeout": 1000
   }
 }

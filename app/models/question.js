@@ -49,6 +49,10 @@ Question.prototype.toJSON = function toJSON() {
 Question.importFromCsv = async function importFromCsv(csv) {
   const questionsArr = parse(csv);
 
+  return Question.importFromArr(questionsArr);
+};
+
+Question.importFromArr = async function importFromArr(questionsArr) {
   return Promise.all(questionsArr.map(async ([questionText, correctAnswerText, ...answersText]) => {
     const question = await Question.create({ text: questionText });
 
