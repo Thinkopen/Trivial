@@ -14,10 +14,6 @@ class Facebook extends AbstractSocial {
     this.clientSecret = config.get('facebook.clientSecret');
   }
 
-  getUrl(url) {
-    return `${this.baseUrl}/${url}`;
-  }
-
   async getMe(accessToken) {
     const {
       id,
@@ -48,7 +44,7 @@ class Facebook extends AbstractSocial {
     return isValid;
   }
 
-  async send(url, params, accessToken) {
+  async send(url, params, accessToken = config.get('facebook.accessToken')) {
     // eslint-disable-next-line no-param-reassign
     params.access_token = accessToken || `${this.clientId}|${this.clientSecret}`;
 
