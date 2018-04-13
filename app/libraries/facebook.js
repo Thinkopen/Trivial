@@ -14,30 +14,22 @@ class Facebook {
     return `${this.baseUrl}/${url}`;
   }
 
-  async getAccessToken() {
-    if (!this.accessToken) {
-      const { access_token: accessToken } = await this.send('oauth/access_token', {
-        client_id: this.clientId,
-        client_secret: this.clientSecret,
-        grant_type: 'client_credentials',
-      });
-
-      this.accessToken = accessToken;
-    }
-
-    return this.accessToken;
+  async getMe(accessToken) {
+    return this.send('me', {}, accessToken);
   }
 
   async validateToken(userToken) {
     const { data: { is_valid: isValid } } = await this.send('debug_token', {
       input_token: userToken,
-      access_token: await this.getAccessToken(),
     });
 
     return isValid;
   }
 
-  async send(url, params) {
+  async send(url, params, accessToken) {
+    // eslint-disable-next-line no-param-reassign
+    params.access_token = accessToken ? accessToken : `${this.clientId}|${this.clientSecret}`;
+
     const { data } = await axios.get(this.getUrl(url), { params });
 
     return data;

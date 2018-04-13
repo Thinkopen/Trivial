@@ -4,10 +4,10 @@ const AbstractController = require('.');
 
 class AuthController extends AbstractController {
   initRouter() {
-    this.router.post('/validateFacebookToken', AuthController.validateFromSocial(token => facebook.validateToken(token)));
+    this.router.post('/validateFacebookToken', AuthController.validateFromSocial(facebook));
   }
 
-  static validateFromSocial(validate) {
+  static validateFromSocial(social) {
     return async (request, response) => {
       const { token } = request.body;
 
@@ -15,11 +15,13 @@ class AuthController extends AbstractController {
         throw new Error('No token provided');
       }
 
-      const isValid = await validate(token);
+      const isValid = await social.validateToken(token);
 
       if (!isValid) {
         throw new Error('Invalid token');
       }
+
+      const me = social.getMe(token);
 
       response.json({ token, isValid });
     };

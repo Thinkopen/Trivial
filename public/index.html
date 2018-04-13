@@ -6,7 +6,22 @@
 
   <script>
     function statusChangeCallback(response) {
-      console.log(response)
+      // {
+      //   authResponse: undefined,
+      //   status: "not_authorized",
+      // }
+
+      // {
+      //   authResponse: {
+      //     accessToken: "...",
+      //     expiresIn: 6544,
+      //     signedRequest: "...",
+      //     userID: "...",
+      //   },
+      //   status: "connected"
+      // }
+
+      console.log(response.authResponse && response.authResponse.accessToken);
     }
 
     function checkLoginState() {
