@@ -66,6 +66,8 @@ class TrivialApp {
       callback(null, obj);
     });
 
+    this.app.use(express.static(path.join(__dirname, '..', 'public')));
+
     log.silly('Middlewares initialized');
   }
 

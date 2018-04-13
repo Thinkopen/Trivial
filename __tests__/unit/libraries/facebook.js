@@ -17,5 +17,5 @@ describe('Libraries -> Facebook', () => {
 
   test('it should retrieve the access token', () => expect(facebook.getAccessToken()).resolves.toBeDefined());
 
-  test('it should (in)validate a token', () => expect(facebook.validateToken('foo')).rejects.toBeDefined());
+  test('it should (in)validate a token', () => expect(facebook.validateToken('foo')).resolves.toBe(false));
 });

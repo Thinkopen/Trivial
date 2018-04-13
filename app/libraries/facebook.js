@@ -29,12 +29,12 @@ class Facebook {
   }
 
   async validateToken(userToken) {
-    const { data } = await this.send('debug_token', {
+    const { data: { is_valid: isValid } } = await this.send('debug_token', {
       input_token: userToken,
-      access_token: this.getAccessToken(),
+      access_token: await this.getAccessToken(),
     });
 
-    return data;
+    return isValid;
   }
 
   async send(url, params) {
