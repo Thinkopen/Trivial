@@ -1,4 +1,4 @@
-const facebook = require('../../../app/libraries/facebook');
+const facebook = require('../../../../app/libraries/social/facebook');
 
 describe('Libraries -> Facebook', () => {
   test('it should have some default properties', () => {

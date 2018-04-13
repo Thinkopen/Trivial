@@ -1,4 +1,4 @@
-const facebook = require('../libraries/facebook');
+const facebook = require('../libraries/social/facebook');
 
 const AbstractController = require('.');
 

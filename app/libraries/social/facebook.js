@@ -1,8 +1,12 @@
 const axios = require('axios');
 const config = require('config');
 
-class Facebook {
+const AbstractSocial = require('.');
+
+class Facebook extends AbstractSocial {
   constructor() {
+    super();
+
     this.version = 'v2.11';
     this.baseUrl = `https://graph.facebook.com/${this.version}`;
 
@@ -28,7 +32,7 @@ class Facebook {
 
   async send(url, params, accessToken) {
     // eslint-disable-next-line no-param-reassign
-    params.access_token = accessToken ? accessToken : `${this.clientId}|${this.clientSecret}`;
+    params.access_token = accessToken || `${this.clientId}|${this.clientSecret}`;
 
     const { data } = await axios.get(this.getUrl(url), { params });
 
