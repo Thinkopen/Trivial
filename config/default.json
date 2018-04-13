@@ -31,5 +31,10 @@
     "jwt": {
       "secret": "secret123"
     }
+  },
+
+  "facebook": {
+    "clientId": "",
+    "clientSecret": ""
   }
 }

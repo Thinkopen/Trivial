@@ -1,5 +1,10 @@
 {
   "server": {
     "port": "PORT"
+  },
+
+  "facebook": {
+    "clientId": "FB_CLIENT_ID",
+    "clientSecret": "FB_CLIENT_SECRET"
   }
 }
