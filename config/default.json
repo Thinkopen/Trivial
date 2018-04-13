@@ -11,6 +11,8 @@
     "dialect": "sqlite",
     "database": "trivial",
 
+    "url": false,
+
     "operatorsAliases": false
   },
 

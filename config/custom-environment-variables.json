@@ -3,6 +3,10 @@
     "port": "PORT"
   },
 
+  "database": {
+    "url": "DATABASE_URL"
+  },
+
   "facebook": {
     "clientSecret": "FB_CLIENT_SECRET"
   }
