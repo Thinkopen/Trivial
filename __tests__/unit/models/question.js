@@ -17,9 +17,7 @@ describe('Models -> Question', () => {
   });
 
   test('it should have the right associations', () => {
-    expect(Question.associations).toHaveProperty('answers');
-    expect(Question.associations).toHaveProperty('rooms');
-    expect(Question.associations).toHaveProperty('roomQuestionUserAnswers');
+    expect(Object.keys(Question.associations)).toEqual(['answers', 'rooms']);
   });
 
   test('it should have the right custom static methods', () => {

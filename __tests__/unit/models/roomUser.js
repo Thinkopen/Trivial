@@ -10,10 +10,10 @@ describe('Models -> RoomUser', () => {
   });
 
   test('it should have the right attributes', () => {
-    expect(Object.keys(RoomUser.attributes)).toEqual(['id', 'createdAt', 'updatedAt', 'roomId', 'userId']);
+    expect(Object.keys(RoomUser.attributes)).toEqual(['id', 'score', 'createdAt', 'updatedAt', 'roomId', 'userId']);
   });
 
   test('it should have the right associations', () => {
-    expect(RoomUser.associations).toEqual({});
+    expect(Object.keys(RoomUser.associations)).toEqual(['answers']);
   });
 });

@@ -19,6 +19,6 @@ describe('Models -> RoomQuestion', () => {
   });
 
   test('it should have the right associations', () => {
-    expect(RoomQuestion.associations).toEqual({});
+    expect(Object.keys(RoomQuestion.associations)).toEqual([]);
   });
 });
