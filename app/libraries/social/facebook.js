@@ -44,7 +44,7 @@ class Facebook extends AbstractSocial {
     return isValid;
   }
 
-  async send(url, params, accessToken = config.get('facebook.accessToken')) {
+  async send(url, params, accessToken) {
     // eslint-disable-next-line no-param-reassign
     params.access_token = accessToken || `${this.clientId}|${this.clientSecret}`;
 

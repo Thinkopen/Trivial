@@ -8,6 +8,7 @@
   },
 
   "facebook": {
-    "clientSecret": "FB_CLIENT_SECRET"
+    "clientSecret": "FB_CLIENT_SECRET",
+    "accessToken": "FB_ACCESS_TOKEN"
   }
 }
