@@ -18,7 +18,7 @@ describe('Libraries -> Social -> Facebook', () => {
 
   test('it should throw an error with a wrong token', () => expect(facebook.getMe('foo')).rejects.toBeDefined());
 
-  if (config.get('facebook.accessToken')) {
+  if (config.has('facebook.accessToken')) {
     test('it should validate a correct token', () => facebook.validateToken(config.get('facebook.accessToken'))
       .catch(error => expect(error).not.toBeDefined())
       .then((validateTokenResponse) => {

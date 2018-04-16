@@ -37,11 +37,15 @@ class Facebook extends AbstractSocial {
   }
 
   async validateToken(userToken) {
-    const { data: { is_valid: isValid } } = await this.send('debug_token', {
-      input_token: userToken,
-    });
+    try {
+      const { data: { is_valid: isValid } } = await this.send('debug_token', {
+        input_token: userToken,
+      });
 
-    return isValid;
+      return isValid;
+    } catch (error) {
+      return false;
+    }
   }
 
   async send(url, params, accessToken) {
