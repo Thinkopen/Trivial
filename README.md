@@ -18,6 +18,7 @@
   - FE -> BE `answer { questionId, answerId }`: answers to a question
   - BE -> FE `score`: sends the results of the quiz
   - BE -> FE `invalid room id`: ERROR, the room id provided isn't valid
+  - BE -> FE `invalid admin user`: ERROR, you are trying to access the admin socket via a non-admin user
   - BE -> FE `invalid question id`: ERROR, the question id provided isn't valid
   - BE -> FE `invalid answer id`: ERROR, the answer id provided isn't valid
 
@@ -34,6 +35,7 @@
 #### Associations
 
 - belongs to `Question`
+- belongs to many `RoomUser` through `RoomUserAnswer`
 
 ### Question
 
@@ -63,12 +65,25 @@
 
 - `id`: UUID
 - `order`: Number
+- `startedAt`: Date
 - `createdAt`: Date
 - `updatedAt`: Date
 
 ### RoomUser
 
 - `id`: UUID
+- `score`: Double
+- `createdAt`: Date
+- `updatedAt`: Date
+
+#### Associations
+
+- belongs to many `Answer` through `RoomUserAnswer`
+
+### RoomUserAnswer
+
+- `id`: UUID
+- `answeredAfter`: Double
 - `createdAt`: Date
 - `updatedAt`: Date
 
@@ -77,6 +92,11 @@
 - `id`: UUID
 - `name`: String
 - `email`: String
+- `picture`: String
 - `admin`: Boolean
 - `createdAt`: Date
 - `updatedAt`: Date
+
+#### Associations
+
+- belongs to many `Room` through `RoomUser`
