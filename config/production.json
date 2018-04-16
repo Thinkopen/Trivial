@@ -11,6 +11,6 @@
   },
 
   "log": {
-    "level": "info"
+    "level": "silly"
   }
 }
