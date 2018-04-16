@@ -1,7 +1,9 @@
 const config = require('config');
+const moment = require('moment');
 const jwtAuth = require('socketio-jwt-auth');
 
 const { sequelize } = require('../../libraries/db');
+const jwt = require('../../libraries/jwt');
 
 const Answer = require('../../models/answer');
 const Question = require('../../models/question');
@@ -38,6 +40,15 @@ class SocketQuiz {
   }
 
   async handleConnect(socket) {
+    const isAdmin = socket.handshake.query.admin === '1';
+
+    if (isAdmin && !socket.request.user.admin) {
+      socket.emit('invalid admin user');
+      socket.disconnect(true);
+
+      return;
+    }
+
     socket.on('start quiz', () => this.handleStart());
     socket.on('answer', payload => this.handleAnswer(socket, payload));
 
@@ -48,18 +59,33 @@ class SocketQuiz {
       socket.disconnect(true);
 
       delete SocketQuiz.rooms[this.roomId];
+
+      return;
+    }
+
+    if (!isAdmin && !this.room.users.some(user => user.id === socket.request.user.id)) {
+      await this.room.addUser(socket.request.user);
+      await this.fetchRoom();
     }
   }
 
   async fetchRoom() {
-    this.room = await Room.findOne({
+    const conditions = {
       where: { id: this.roomId },
       include: [{
         model: Question,
         through: RoomQuestion,
         include: [{ model: Answer }],
+      }, {
+        model: User,
       }],
-    });
+    };
+
+    if (this.room) {
+      await this.room.reload(conditions);
+    } else {
+      this.room = await Room.findOne(conditions);
+    }
   }
 
   async handleStart() {
@@ -73,45 +99,65 @@ class SocketQuiz {
     await Promise.all(questions.map((question, index) => this.room.addQuestion(question, { through: { order: index } })));
 
     await this.fetchRoom();
-    this.nextQuestion = 0;
+    this.nextQuestion = -1;
 
-    this.emitNextQuestion();
+    await this.emitNextQuestion();
   }
 
-  emitNextQuestion() {
-    if (this.nextQuestion >= this.room.questions.length) {
-      this.emitScore();
+  get question() {
+    return this.room.questions[this.nextQuestion];
+  }
+
+  async emitNextQuestion() {
+    this.nextQuestion += 1;
+
+    if (!this.question) {
+      await this.emitScore();
 
       return;
     }
 
-    this.namespace.emit('question', this.room.questions[this.nextQuestion]);
-    this.nextQuestion += 1;
+    await this.question.roomQuestion.setStarted();
+
+    this.namespace.emit('question', this.question);
 
     this.nextQuestionTimeout = setTimeout(() => this.emitNextQuestion(), config.get('quiz.nextQuestionTimeout'));
   }
 
-  emitScore() {
-    this.namespace.emit('score', this.room);
+  async emitScore() {
+    await this.fetchRoom();
+
+    await Promise.all(this.room.users.map(user => user.roomUser.calculate()));
+
+    const score = this.room.users
+      .map(user => ({
+        name: user.name,
+        score: user.roomUser.score,
+      }))
+      .sort((a, b) => a.score - b.score);
+
+    this.namespace.emit('score', score);
   }
 
-  handleAnswer(socket, { questionId, answerId }) {
-    const question = this.room.questions.find(tmpQuestion => tmpQuestion.id === questionId);
-
-    if (!question) {
+  async handleAnswer(socket, { questionId, answerId }) {
+    if (this.question.id !== questionId) {
       socket.emit('invalid question id');
       return;
     }
 
-    const answer = question.answers.find(tmpAnswer => tmpAnswer.id === answerId);
+    const answer = this.question.answers.find(tmpAnswer => tmpAnswer.id === answerId);
 
     if (!answer) {
       socket.emit('invalid answer id');
       return;
     }
 
-    console.log('QUESTION:', question.text);
-    console.log('ANSWER:', answer.text);
+    const answeredAfter = moment().diff(this.question.startedAt);
+
+    await this.room.users
+      .find(user => user.id === socket.request.user.id)
+      .roomUser
+      .addAnswer(answer, { through: { answeredAfter } });
   }
 }
 
@@ -119,23 +165,9 @@ class SocketQuizController extends AbstractController {
   initRouter() {
     const room = this.io.of(SocketQuiz.roomNameRegex);
 
-    room.use(jwtAuth.authenticate({
-      secret: config.get('jwt.secret'),
-    }, SocketQuizController.handleJwt));
+    room.use(jwtAuth.authenticate({ secret: jwt.secretOrKey }, jwt.handleJwt));
 
     room.on('connect', socket => SocketQuiz.getInstance(socket).handleConnect(socket));
-  }
-
-  static handleJwt(payload, done) {
-    User.findOne({ where: { id: payload.id } })
-      .then((user) => {
-        if (!user) {
-          return done(null, false, 'user does not exist');
-        }
-
-        return done(null, user);
-      })
-      .catch(error => done(error));
   }
 }
 

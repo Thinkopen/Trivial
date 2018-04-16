@@ -18,5 +18,6 @@ describe('Models -> Answer', () => {
 
   test('it should have the right associations', () => {
     expect(Answer.associations).toHaveProperty('question');
+    expect(Answer.associations).toHaveProperty('roomQuestionUserAnswers');
   });
 });

@@ -10,6 +10,16 @@ const RoomQuestion = sequelize.define('roomQuestion', {
   order: {
     type: Sequelize.INTEGER,
   },
+
+  startedAt: {
+    type: Sequelize.DATE,
+  },
 });
+
+RoomQuestion.prototype.setStarted = async function setStarted() {
+  this.startedAt = new Date();
+
+  return this.save();
+};
 
 module.exports = RoomQuestion;

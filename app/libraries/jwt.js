@@ -18,6 +18,19 @@ class Auth {
   verify(token) {
     return jwt.verify(token, this.secretOrKey);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  handleJwt(payload, done) {
+    User.findOne({ where: { id: payload.id } })
+      .then((user) => {
+        if (!user) {
+          return done(null, false, 'user does not exist');
+        }
+
+        return done(null, user);
+      })
+      .catch(error => done(error));
+  }
 }
 
 module.exports = new Auth();

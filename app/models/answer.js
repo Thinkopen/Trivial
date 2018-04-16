@@ -19,8 +19,11 @@ const Answer = sequelize.define('answer', {
 
 Answer.associate = function associate() {
   const Question = require('./question');
+  const RoomUser = require('./roomUser');
+  const RoomUserAnswer = require('./roomUserAnswer');
 
   Answer.belongsTo(Question);
+  Answer.belongsToMany(RoomUser, { through: RoomUserAnswer });
 };
 
 module.exports = Answer;

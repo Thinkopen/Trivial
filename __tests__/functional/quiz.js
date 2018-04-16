@@ -46,7 +46,7 @@ describe('Functional -> Quiz', () => {
 
       ioOptionsAdmin = {
         ...ioOptions,
-        query: `auth_token=${tokenAdmin}`,
+        query: `auth_token=${tokenAdmin}&admin=1`,
         forceNew: true,
       };
     })
@@ -205,17 +205,25 @@ describe('Functional -> Quiz', () => {
       checkWrongEvent(client, 'invalid answer id', timeout, reject);
     }))
     .then(answer => new Promise((resolve, reject) => {
-      client.emit('answer', { questionId: answer.questionId, answerId: answer.answerId });
+      client.emit('answer', { questionId: answer.questionId, answerId: answer.id });
 
       const timeout = setTimeoutForNothing(clientAdmin, reject);
 
+      checkWrongEvent(client, 'invalid question id', timeout, reject);
+      checkWrongEvent(client, 'invalid answer id', timeout, reject);
+
       clientAdmin.off('score');
-      clientAdmin.on('score', () => {
+      clientAdmin.on('score', (score) => {
         clearTimeout(timeout);
 
         clientAdmin.disconnect();
 
-        resolve();
+        resolve(score);
       });
-    })));
+    }))
+    .then((score) => {
+      expect(score).toHaveLength(1);
+      expect(score).toHaveProperty('0.name', 'foo');
+      expect(score).toHaveProperty('0.score');
+    }));
 });
