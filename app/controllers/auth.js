@@ -1,4 +1,4 @@
-const jwt = require('../libraries/auth/jwt');
+const jwt = require('../libraries/jwt');
 const facebook = require('../libraries/social/facebook');
 
 const User = require('../models/user');
@@ -30,6 +30,10 @@ class AuthController extends AbstractController {
         where: {
           email: userRaw.email,
         },
+
+        defaults: {
+          name: userRaw.name,
+        },
       });
 
       user.name = user.name || userRaw.name;
@@ -37,7 +41,7 @@ class AuthController extends AbstractController {
 
       await user.save();
 
-      const jwtToken = jwt.generateJwt(user);
+      const jwtToken = jwt.sign(user);
 
       response.json({ user, token: jwtToken });
     };

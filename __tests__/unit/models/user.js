@@ -13,7 +13,7 @@ describe('Models -> User', () => {
   });
 
   test('it should have the right attributes', () => {
-    expect(Object.keys(User.attributes)).toEqual(['id', 'name', 'email', 'admin', 'createdAt', 'updatedAt']);
+    expect(Object.keys(User.attributes)).toEqual(['id', 'name', 'email', 'picture', 'admin', 'createdAt', 'updatedAt']);
   });
 
   test('it should have the right associations', () => {
