@@ -66,8 +66,6 @@ class TrivialApp {
       callback(null, obj);
     });
 
-    this.app.use(express.static(path.join(__dirname, '..', 'public')));
-
     log.silly('Middlewares initialized');
   }
 
@@ -99,6 +97,8 @@ class TrivialApp {
     const controllersDir = path.join(__dirname, 'controllers');
 
     this.importRoutesFromDirectory(controllersDir, '', true);
+
+    this.app.use(express.static(path.join(__dirname, '..', 'public')));
 
     this.app.use(AbstractController.handle404);
     this.app.use(AbstractController.handle500);
