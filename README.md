@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Thinkopen/Trivial.svg?branch=master)](https://travis-ci.org/Thinkopen/Trivial)
+
 # Trivial
 
 ## Endpoints
