@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/Thinkopen/Trivial.svg?branch=master)](https://travis-ci.org/Thinkopen/Trivial)
+[![Maintainability](https://api.codeclimate.com/v1/badges/86cb63d31f982b02d9a6/maintainability)](https://codeclimate.com/github/Thinkopen/Trivial/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/86cb63d31f982b02d9a6/test_coverage)](https://codeclimate.com/github/Thinkopen/Trivial/test_coverage)
 
 # Trivial
 
