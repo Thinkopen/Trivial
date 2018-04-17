@@ -185,7 +185,7 @@ describe('Functional -> Quiz', () => {
       clientAdmin.on('question', (question) => {
         clearTimeout(timeout);
 
-        resolve(question.answers[0]);
+        resolve(question.answers.find(tmpAnswer => !tmpAnswer.correct));
       });
     }))
     .then(answer => new Promise((resolve, reject) => {
@@ -197,7 +197,7 @@ describe('Functional -> Quiz', () => {
       clientAdmin.on('question', (question) => {
         clearTimeout(timeout);
 
-        resolve(question.answers[0]);
+        resolve(question.answers.find(tmpAnswer => tmpAnswer.correct));
       });
 
       checkWrongEvent(client, 'score', timeout, reject);
@@ -224,6 +224,6 @@ describe('Functional -> Quiz', () => {
     .then((score) => {
       expect(score).toHaveLength(1);
       expect(score).toHaveProperty('0.name', 'foo');
-      expect(score).toHaveProperty('0.score');
+      expect(score).toHaveProperty('0.score', 10);
     }));
 });
