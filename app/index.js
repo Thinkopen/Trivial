@@ -106,14 +106,18 @@ class TrivialApp {
     log.silly('Routes initialized');
   }
 
-  async listen() {
-    await sync();
+  async listen({ server: serverOptions, db: dbOptions } = {}) {
+    await sync(dbOptions);
     log.silly('Database synced');
 
-    await new Promise((resolve, reject) =>
-      this.server.listen(config.get('server.port'), err => (err ? reject(err) : resolve())));
+    const port = (serverOptions && serverOptions.port) || config.get('server.port');
 
-    log.info(`Server listening on port ${config.get('server.port')}`);
+    await new Promise((resolve, reject) => {
+      this.server.listen(port, () => resolve());
+      this.server.once('error', error => reject(error));
+    });
+
+    log.info(`Server listening on port ${port}`);
   }
 
   async close() {
