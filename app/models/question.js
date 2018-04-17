@@ -39,7 +39,7 @@ const oldToJSON = Question.prototype.toJSON;
 Question.prototype.toJSON = function toJSON() {
   const question = oldToJSON.call(this);
 
-  if (question.answers) {
+  if (question.answers && question.answers.length) {
     question.answers = shuffle(question.answers);
   }
 
