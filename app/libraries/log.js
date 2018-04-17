@@ -19,6 +19,7 @@ function loggerFactory(label) {
         label,
         level: config.get('log.level'),
         timestamp,
+        silent: config.get('log.silent'),
       }),
     ],
   });

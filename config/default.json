@@ -18,6 +18,7 @@
 
   "log": {
     "level": "silly",
+    "silent": false,
     "labels": [
       "default",
       "server",

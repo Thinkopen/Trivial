@@ -10,7 +10,7 @@
   },
 
   "log": {
-    "level": "error"
+    "silent": true
   },
 
   "quiz": {
