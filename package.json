@@ -10,7 +10,8 @@
     "eslint": "eslint .",
     "start": "node index",
     "pretest": "npm run eslint",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
