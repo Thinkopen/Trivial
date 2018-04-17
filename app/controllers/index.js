@@ -56,7 +56,7 @@ class AbstractController {
   static handle500(rawErr, req, res, next) { // eslint-disable-line no-unused-vars
     const err = typeof rawErr === 'string' ? new Error(rawErr) : rawErr;
 
-    if (config.get('environment') !== 'test' && err.status !== 404) {
+    if (err.status !== 404) {
       log.server.error(err.message);
       log.debug(err.stack);
     }
