@@ -18,6 +18,17 @@ describe('Controllers -> Auth', () => {
 
   afterEach(() => app.close());
 
+  test('it should throw an error if no token is provided', () => request(app.app)
+    .post(validateFacebookTokenUrl)
+    .expect(500)
+    .then(({ body }) => expect(body).toHaveProperty('error', 'No token provided')));
+
+  test('it should throw an error it the token is not valid', () => request(app.app)
+    .post(validateFacebookTokenUrl)
+    .send({ token: 'aaaa' })
+    .expect(500)
+    .then(({ body }) => expect(body).toHaveProperty('error', 'Invalid token')));
+
   if (config.has('facebook.accessToken')) {
     test('it should take the facebook token and answer with the jwt token', () => User.create({
       email: 'niccolo@olivieriachille.com',
@@ -57,7 +68,7 @@ describe('Controllers -> Auth', () => {
       .then(() => request(app.app)
         .post(validateFacebookTokenUrl)
         .send({ token: config.get('facebook.accessToken') })
-        // .expect(200)
+        .expect(200)
         .then(({ body: { token, user } }) => {
           expect(token).toBeDefined();
           expect(() => jwt.verify(token)).not.toThrowError();
@@ -85,7 +96,5 @@ describe('Controllers -> Auth', () => {
           return User.findAll();
         }))
       .then(users => expect(users).toHaveLength(1)));
-  } else {
-    test('dummy test not to make the suite fail', () => {});
   }
 });

@@ -36,7 +36,6 @@ class AuthController extends AbstractController {
         },
       });
 
-      user.name = user.name || userRaw.name;
       user.picture = user.picture || userRaw.picture;
 
       await user.save();
