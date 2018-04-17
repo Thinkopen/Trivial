@@ -32,6 +32,12 @@ describe('Controllers -> Questions', () => {
         expect(theQuestion).toHaveProperty('text', question.text);
       })));
 
+  test('it should throw an error while retrieving a non-existing question', () => Question.findOne()
+    .then(question => request(app.app)
+      .get(`${baseUrl}/${question.id}3`)
+      .expect(500)
+      .then(({ body }) => expect(body).toHaveProperty('error', 'Question not found'))));
+
   test('it should delete a question', () => Question.findOne()
     .then(question => request(app.app)
       .delete(`${baseUrl}/${question.id}`)
@@ -45,4 +51,23 @@ describe('Controllers -> Questions', () => {
     .expect(200)
     .then(() => Question.findAll())
     .then(questions => expect(questions).toHaveLength(4)));
+
+  test('it should fail with other fields', () => request(app.app)
+    .post(importUrl)
+    .attach('questions', path.join(__dirname, '..', '..', 'testUtils', 'questions.csv'))
+    .field('foo', 'bar')
+    .expect(500)
+    .then(({ body }) => expect(body).toHaveProperty('error', 'maxFieldsSize exceeded, received 3 bytes of field data')));
+
+  test('it should fail if the file isn\'t in the right field', () => request(app.app)
+    .post(importUrl)
+    .attach('question', path.join(__dirname, '..', '..', 'testUtils', 'questions.csv'))
+    .expect(500)
+    .then(({ body }) => expect(body).toHaveProperty('error', 'Questions file not found')));
+
+  test('it should fail if the file isn\'t formatted properly', () => request(app.app)
+    .post(importUrl)
+    .attach('questions', path.join(__dirname, '..', '..', 'testUtils', 'questions-wrong.csv'))
+    .expect(500)
+    .then(({ body }) => expect(body).toHaveProperty('error', 'Invalid opening quote at line 1')));
 });

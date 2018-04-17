@@ -37,14 +37,19 @@ class QuestionsController extends AbstractController {
 
   static actionImport(request, response, next) {
     const form = new IncomingForm();
+    form.maxFieldsSize = 1;
 
     form.parse(request, (error, fields, files) => {
       if (error) {
-        throw new Error(error);
+        next(error);
+
+        return;
       }
 
       if (!files || !files.questions) {
-        throw new Error('Questions file not found');
+        next('Questions file not found');
+
+        return;
       }
 
       const questionsCsv = fs.readFileSync(files.questions.path, 'utf8');
@@ -62,7 +67,9 @@ class QuestionsController extends AbstractController {
     });
 
     if (!question) {
-      throw new Error('Question not found');
+      next('Question not found');
+
+      return;
     }
 
     request.question = question;
