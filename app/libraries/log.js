@@ -5,6 +5,7 @@ const winston = require('winston');
 // Log levels:
 // { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
 
+/* istanbul ignore next */
 function timestamp() {
   return moment().format('YYYY-MM-DD HH:mm:ss.SSS Z');
 }

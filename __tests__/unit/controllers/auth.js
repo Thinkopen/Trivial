@@ -29,72 +29,70 @@ describe('Controllers -> Auth', () => {
     .expect(500)
     .then(({ body }) => expect(body).toHaveProperty('error', 'Invalid token')));
 
-  if (config.has('facebook.accessToken')) {
-    test('it should take the facebook token and answer with the jwt token', () => User.create({
-      email: 'niccolo@olivieriachille.com',
-      name: 'Niccolò Olivieri Achille',
-    })
-      .then(dbUser => request(app.app)
-        .post(validateFacebookTokenUrl)
-        .send({ token: config.get('facebook.accessToken') })
-        .expect(200)
-        .then(({ body: { token, user } }) => {
-          expect(token).toBeDefined();
-          expect(() => jwt.verify(token)).not.toThrowError();
+  test('it should take the facebook token and answer with the jwt token', () => User.create({
+    email: 'user@email.com',
+    name: 'User Name',
+  })
+    .then(dbUser => request(app.app)
+      .post(validateFacebookTokenUrl)
+      .send({ token: config.has('facebook.accessToken') ? config.get('facebook.accessToken') : 'right-token' })
+      .expect(200)
+      .then(({ body: { token, user } }) => {
+        expect(token).toBeDefined();
+        expect(() => jwt.verify(token)).not.toThrowError();
 
-          expect(user).toBeDefined();
-          expect(user).toHaveProperty('id', dbUser.id);
-          expect(user).toHaveProperty('name', dbUser.name);
-          expect(user).toHaveProperty('email', dbUser.email);
+        expect(user).toBeDefined();
+        expect(user).toHaveProperty('id', dbUser.id);
+        expect(user).toHaveProperty('name', dbUser.name);
+        expect(user).toHaveProperty('email', dbUser.email);
 
-          const payload = jwt.verify(token);
+        const payload = jwt.verify(token);
 
-          expect(payload).toBeDefined();
-          expect(payload).toHaveProperty('id', dbUser.id);
-          expect(payload).toHaveProperty('name', dbUser.name);
-          expect(payload).toHaveProperty('email', dbUser.email);
+        expect(payload).toBeDefined();
+        expect(payload).toHaveProperty('id', dbUser.id);
+        expect(payload).toHaveProperty('name', dbUser.name);
+        expect(payload).toHaveProperty('email', dbUser.email);
 
-          expect(payload).toHaveProperty('exp');
+        expect(payload).toHaveProperty('exp');
 
-          const { exp } = payload;
-          const expDate = moment(exp, 'X');
-          const maxExp = moment().add(jwt.expiresIn, 'seconds');
+        const { exp } = payload;
+        const expDate = moment(exp, 'X');
+        const maxExp = moment().add(jwt.expiresIn, 'seconds');
 
-          expect(expDate.isSameOrBefore(maxExp)).toBe(true);
-        })));
+        expect(expDate.isSameOrBefore(maxExp)).toBe(true);
+      })));
 
-    test('it should create a new user', () => User.findAll()
-      .then(users => expect(users).toHaveLength(0))
-      .then(() => request(app.app)
-        .post(validateFacebookTokenUrl)
-        .send({ token: config.get('facebook.accessToken') })
-        .expect(200)
-        .then(({ body: { token, user } }) => {
-          expect(token).toBeDefined();
-          expect(() => jwt.verify(token)).not.toThrowError();
+  test('it should create a new user', () => User.findAll()
+    .then(users => expect(users).toHaveLength(0))
+    .then(() => request(app.app)
+      .post(validateFacebookTokenUrl)
+      .send({ token: config.has('facebook.accessToken') ? config.get('facebook.accessToken') : 'right-token' })
+      .expect(200)
+      .then(({ body: { token, user } }) => {
+        expect(token).toBeDefined();
+        expect(() => jwt.verify(token)).not.toThrowError();
 
-          expect(user).toBeDefined();
-          expect(user).toHaveProperty('id');
-          expect(user).toHaveProperty('name');
-          expect(user).toHaveProperty('email');
+        expect(user).toBeDefined();
+        expect(user).toHaveProperty('id');
+        expect(user).toHaveProperty('name');
+        expect(user).toHaveProperty('email');
 
-          const payload = jwt.verify(token);
+        const payload = jwt.verify(token);
 
-          expect(payload).toBeDefined();
-          expect(payload).toHaveProperty('id');
-          expect(payload).toHaveProperty('name');
-          expect(payload).toHaveProperty('email');
+        expect(payload).toBeDefined();
+        expect(payload).toHaveProperty('id');
+        expect(payload).toHaveProperty('name');
+        expect(payload).toHaveProperty('email');
 
-          expect(payload).toHaveProperty('exp');
+        expect(payload).toHaveProperty('exp');
 
-          const { exp } = payload;
-          const expDate = moment(exp, 'X');
-          const maxExp = moment().add(jwt.expiresIn, 'seconds');
+        const { exp } = payload;
+        const expDate = moment(exp, 'X');
+        const maxExp = moment().add(jwt.expiresIn, 'seconds');
 
-          expect(expDate.isSameOrBefore(maxExp)).toBe(true);
+        expect(expDate.isSameOrBefore(maxExp)).toBe(true);
 
-          return User.findAll();
-        }))
-      .then(users => expect(users).toHaveLength(1)));
-  }
+        return User.findAll();
+      }))
+    .then(users => expect(users).toHaveLength(1)));
 });

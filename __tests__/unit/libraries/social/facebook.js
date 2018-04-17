@@ -14,24 +14,22 @@ describe('Libraries -> Social -> Facebook', () => {
     expect(facebook.clientSecret).toBeDefined();
   });
 
-  test('it should invalidate a wrong token', () => expect(facebook.validateToken('foo')).resolves.toBe(false));
+  test('it should invalidate a wrong token', () => expect(facebook.validateToken('wrong-token')).resolves.toBe(false));
 
-  test('it should throw an error with a wrong token', () => expect(facebook.getMe('foo')).rejects.toBeDefined());
+  test('it should throw an error with a wrong token', () => expect(facebook.getMe('wrong-token')).rejects.toBeDefined());
 
-  if (config.has('facebook.accessToken')) {
-    test('it should validate a correct token', () => facebook.validateToken(config.get('facebook.accessToken'))
-      .catch(error => expect(error).not.toBeDefined())
-      .then((validateTokenResponse) => {
-        expect(validateTokenResponse).toBe(true);
-      }));
+  test('it should validate a correct token', () => facebook.validateToken(config.has('facebook.accessToken') ? config.get('facebook.accessToken') : 'right-token')
+    .catch(error => expect(error).not.toBeDefined())
+    .then((validateTokenResponse) => {
+      expect(validateTokenResponse).toBe(true);
+    }));
 
-    test('it should get the user properties', () => facebook.getMe(config.get('facebook.accessToken'))
-      .catch(error => expect(error).not.toBeDefined())
-      .then((getMeResponse) => {
-        expect(getMeResponse).toHaveProperty('id');
-        expect(getMeResponse).toHaveProperty('name');
-        expect(getMeResponse).toHaveProperty('email');
-        expect(getMeResponse).toHaveProperty('picture');
-      }));
-  }
+  test('it should get the user properties', () => facebook.getMe(config.has('facebook.accessToken') ? config.get('facebook.accessToken') : 'right-token')
+    .catch(error => expect(error).not.toBeDefined())
+    .then((getMeResponse) => {
+      expect(getMeResponse).toHaveProperty('id');
+      expect(getMeResponse).toHaveProperty('name');
+      expect(getMeResponse).toHaveProperty('email');
+      expect(getMeResponse).toHaveProperty('picture');
+    }));
 });

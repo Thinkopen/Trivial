@@ -8,15 +8,18 @@ const log = require('./log');
 const configDb = Object.assign({}, config.get('database'));
 configDb.logging = message => log.db.debug(message);
 
+/* istanbul ignore next */
 if (configDb.dialect === 'sqlite' && !configDb.storage) {
   configDb.storage = path.join(__dirname, '..', '..', `${configDb.database}.db`);
 }
 
 let { url } = configDb;
+/* istanbul ignore next */
 if (url && configDb.dialect === 'postgres' && configDb.dialectOptions && configDb.dialectOptions.ssl && !url.includes('?ssl=')) {
   url += '?ssl=true';
 }
 
+/* istanbul ignore next */
 const sequelize = url ? new Sequelize(url, configDb) : new Sequelize(configDb);
 
 async function sync(options) {
@@ -31,6 +34,7 @@ async function sync(options) {
 
   const syncOptions = options || {};
 
+  /* istanbul ignore next */
   if (config.get('environment') === 'test') {
     syncOptions.force = true;
   }

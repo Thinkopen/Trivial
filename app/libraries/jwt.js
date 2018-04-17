@@ -10,7 +10,7 @@ class Auth {
   }
 
   sign(user) {
-    return jwt.sign(user instanceof User ? user.toJSON() : user, this.secretOrKey, {
+    return jwt.sign(user instanceof User ? user.toJSON() : /* istanbul ignore next */ user, this.secretOrKey, {
       expiresIn: this.expiresIn,
     });
   }
@@ -29,7 +29,7 @@ class Auth {
 
         return done(null, user);
       })
-      .catch(error => done(error));
+      .catch(/* istanbul ignore next */ error => done(error));
   }
 }
 

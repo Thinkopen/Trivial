@@ -48,6 +48,7 @@ class Facebook extends AbstractSocial {
     }
   }
 
+  /* istanbul ignore next */
   async send(url, params, accessToken) {
     // eslint-disable-next-line no-param-reassign
     params.access_token = accessToken || `${this.clientId}|${this.clientSecret}`;

@@ -60,6 +60,7 @@
     "winston": "^2.4.1"
   },
   "jest": {
+    "setupFiles": ["<rootDir>/__tests__/testUtils/setup.js"],
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "/node_modules/",
