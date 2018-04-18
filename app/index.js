@@ -62,10 +62,6 @@ class TrivialApp {
       callback(null, user);
     });
 
-    passport.deserializeUser((obj, callback) => {
-      callback(null, obj);
-    });
-
     log.silly('Middlewares initialized');
   }
 
