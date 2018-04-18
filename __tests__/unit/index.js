@@ -32,5 +32,7 @@ describe('Application', () => {
     expect(spyDebug).toHaveBeenCalled();
 
     await app1.close();
+
+    await expect(app2.close()).rejects.toThrow('Not running');
   });
 });
