@@ -1,16 +1,27 @@
 const config = require('config');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 
 const User = require('../models/user');
 
-class Auth {
+class JwtAuth {
   constructor() {
     this.expiresIn = config.get('jwt.expiresIn');
     this.secretOrKey = config.get('jwt.secret');
+
+    this.initJwtPassport();
+  }
+
+  initJwtPassport() {
+    passport.use(new JwtStrategy({
+      secretOrKey: this.secretOrKey,
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    }, this.handlePayload));
   }
 
   sign(user) {
-    return jwt.sign(user instanceof User ? user.toJSON() : /* istanbul ignore next */ user, this.secretOrKey, {
+    return jwt.sign(user instanceof User ? user.toJSON() : user, this.secretOrKey, {
       expiresIn: this.expiresIn,
     });
   }
@@ -20,7 +31,7 @@ class Auth {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  handleJwt(payload, done) {
+  handlePayload(payload, done) {
     User.findOne({ where: { id: payload.id } })
       .then((user) => {
         if (!user) {
@@ -31,6 +42,11 @@ class Auth {
       })
       .catch(/* istanbul ignore next */ error => done(error));
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  authenticate() {
+    return passport.authenticate('jwt', { failWithError: true });
+  }
 }
 
-module.exports = new Auth();
+module.exports = new JwtAuth();

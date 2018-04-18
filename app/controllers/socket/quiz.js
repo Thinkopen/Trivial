@@ -165,7 +165,7 @@ class SocketQuizController extends AbstractController {
   initRouter() {
     const room = this.io.of(SocketQuiz.roomNameRegex);
 
-    room.use(jwtAuth.authenticate({ secret: jwt.secretOrKey }, jwt.handleJwt));
+    room.use(jwtAuth.authenticate({ secret: jwt.secretOrKey }, jwt.handlePayload));
 
     room.on('connect', socket => SocketQuiz.getInstance(socket).handleConnect(socket));
   }

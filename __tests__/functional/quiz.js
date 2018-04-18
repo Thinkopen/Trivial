@@ -1,9 +1,10 @@
 const request = require('supertest');
 const config = require('config');
-const jwt = require('jsonwebtoken');
 const io = require('socket.io-client');
 
 const App = require('../../app');
+
+const jwt = require('../../app/libraries/jwt');
 
 const Question = require('../../app/models/question');
 const User = require('../../app/models/user');
@@ -22,6 +23,8 @@ describe('Functional -> Quiz', () => {
   let ioOptionsUser;
   let ioOptionsAdmin;
 
+  let tokenUser;
+
   function connectClientAndReturn(namespace, options) {
     return io(`http://localhost:${app.server.address().port}/${namespace}`, options);
   }
@@ -36,8 +39,8 @@ describe('Functional -> Quiz', () => {
       User.create({ name: 'admin', email: 'admin@bar.com', admin: true }),
     ]))
     .then(([user, admin]) => {
-      const tokenUser = jwt.sign(user.toJSON(), config.get('jwt.secret'));
-      const tokenAdmin = jwt.sign(admin.toJSON(), config.get('jwt.secret'));
+      tokenUser = jwt.sign(user);
+      const tokenAdmin = jwt.sign(admin);
 
       ioOptionsUser = {
         ...ioOptions,
@@ -102,7 +105,7 @@ describe('Functional -> Quiz', () => {
   }));
 
   test('it should fail if auth token of non existing user', () => new Promise((resolve, reject) => {
-    ioOptionsUser.query = `auth_token=${jwt.sign({ id: 'aaa' }, config.get('jwt.secret'))}`;
+    ioOptionsUser.query = `auth_token=${jwt.sign({ id: 'aaa' })}`;
 
     connectClient('room-aaa', ioOptionsUser);
 
@@ -140,6 +143,7 @@ describe('Functional -> Quiz', () => {
   function requestActiveRoom() {
     return request(app.app)
       .get('/rooms/active')
+      .set('Authorization', `Bearer ${tokenUser}`)
       .expect(200)
       .then(({ body: room }) => room);
   }
