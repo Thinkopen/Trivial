@@ -7,10 +7,12 @@
     "node": "9.11.1"
   },
   "scripts": {
+    "client": "cd client && yarn start",
     "eslint": "eslint .",
     "start": "node index",
     "pretest": "npm run eslint",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "dev": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\""
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,7 @@
   },
   "homepage": "https://github.com/Thinkopen/Trivial#readme",
   "devDependencies": {
+    "concurrently": "^3.5.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.10.0",
