@@ -1,0 +1,4 @@
+{
+  "extends": ["airbnb", "lako-react"],
+  "parser": "babel-eslint"
+}
