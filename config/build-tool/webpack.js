@@ -147,10 +147,11 @@ const webpackConfig = {
 
   plugins: [
     new webpack.DefinePlugin({
-      environment: config.get('environment'),
-      baseUrl: config.get('server.baseUrl'),
-      quiz: config.get('quiz'),
-      facebookClientId: config.get('facebook.clientId'),
+      ENV: JSON.stringify(config.get('environment')),
+      IS_PROD: isProd,
+      BASE_URL: JSON.stringify(config.get('server.baseUrl')),
+      QUIZ: JSON.stringify(config.get('quiz')),
+      FB_CLIENT_ID: JSON.stringify(config.get('facebook.clientId')),
     }),
   ],
 };

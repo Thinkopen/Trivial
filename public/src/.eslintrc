@@ -1,0 +1,35 @@
+{
+  "globals": {
+    "FB": true,
+    "ENV": true,
+    "IS_PROD": true,
+    "BASE_URL": true,
+    "QUIZ": true,
+    "FB_CLIENT_ID": true
+  },
+  "root": true,
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "env": {
+    "browser": true,
+  },
+  "extends": ["plugin:vue/essential", "airbnb-base"],
+  "plugins": ["vue"],
+  "rules": {
+    "import/extensions": ["error", "always", {
+      "js": "never",
+      "vue": "never"
+    }],
+    "no-param-reassign": ["error", {
+      "props": true,
+      "ignorePropertyModificationsFor": [
+        "theState",
+        "state",
+        "acc",
+        "e"
+      ]
+    }],
+    "import/no-unresolved": [0, { "commonjs": true, "amd": true }]
+  }
+}
