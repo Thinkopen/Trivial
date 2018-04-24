@@ -12,15 +12,11 @@
     "parser": "babel-eslint"
   },
   "env": {
-    "browser": true,
+    "browser": true
   },
-  "extends": ["plugin:vue/essential", "airbnb-base"],
+  "extends": ["plugin:vue/recommended"],
   "plugins": ["vue"],
   "rules": {
-    "import/extensions": ["error", "always", {
-      "js": "never",
-      "vue": "never"
-    }],
     "no-param-reassign": ["error", {
       "props": true,
       "ignorePropertyModificationsFor": [
@@ -29,7 +25,6 @@
         "acc",
         "e"
       ]
-    }],
-    "import/no-unresolved": [0, { "commonjs": true, "amd": true }]
+    }]
   }
 }
