@@ -37,12 +37,12 @@ export default {
 </script>
 
 <style>
-.fb-signin-button {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 3px;
-  background-color: #4267b2;
-  color: #fff;
-  cursor: pointer;
-}
+  .fb-signin-button {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    background-color: #4267b2;
+    color: #fff;
+    cursor: pointer;
+  }
 </style>

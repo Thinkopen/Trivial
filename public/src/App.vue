@@ -11,7 +11,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import SocialLogin from './components/SocialLogin.vue';
+import SocialLogin from './components/SocialLogin';
 
 export default {
   name: 'App',
