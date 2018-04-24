@@ -2,26 +2,25 @@
   <div id="app">
     <img src="./assets/logo.png">
     <fb-signin-button
-      :show="!anyLogin"
+      v-if="!isUser"
       :params="fbSignInParams"
       @success="onSignInSuccess"
       @error="onSignInError">
       Sign in with Facebook
     </fb-signin-button>
-    <!--<router-view :show="anyLogin"/>-->
+
+    <router-view v-else/>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'App',
 
   computed: {
-    ...mapGetters({
-      anyLogin: 'anyLogin',
-    }),
+    ...mapGetters(['isUser']),
   },
 
   data() {
@@ -34,13 +33,15 @@ export default {
   },
 
   methods: {
-    onSignInSuccess(response) {
-      console.log(response);
-      FB.api('/me', dude => console.log(`Good to see you, ${dude.name}.`));
+    onSignInSuccess({ authResponse }) {
+      this.setFacebook(authResponse);
     },
+
     onSignInError(error) {
       console.log('OH NOES', error);
     },
+
+    ...mapActions(['setFacebook']),
   },
 };
 </script>

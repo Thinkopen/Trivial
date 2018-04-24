@@ -1,17 +1,25 @@
+import authApi from '../../api/auth';
+
 export const state = {
   facebook: null,
   google: null,
+  user: null,
 };
 
 export const getters = {
   getFacebook: theState => theState.facebook,
   getGoogle: theState => theState.google,
-  anyLogin: theState => theState.facebook || theState.google,
+
+  isUser: theState => theState.user,
 };
 
 export const actions = {
-  setFacebook({ commit }, userId) {
+  async setFacebook({ commit }, { userID: userId, accessToken }) {
     commit('setFacebookId', userId);
+
+    const { user } = await authApi.validateFacebookToken(accessToken);
+
+    commit('setUser', user);
   },
 
   setGoogle({ commit }, userId) {
@@ -26,5 +34,9 @@ export const mutations = {
 
   setGoogleId(theState, userId) {
     theState.google = userId;
+  },
+
+  setUser(theState, user) {
+    theState.user = user;
   },
 };
