@@ -8,6 +8,9 @@ export default class AbstractApi {
       url,
       params,
       data,
+      headers: {
+        Authorization: `Bearer ${AbstractApi.JWT}`,
+      },
     });
 
     return result;

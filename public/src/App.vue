@@ -4,26 +4,29 @@
       src="./assets/top-white.png"
       class="main-logo">
 
-    <SocialLogin v-if="!isUser"/>
+    <SocialLogin v-if="!user"/>
 
-    <router-view v-else/>
+    <Room v-else/>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex';
 
-import SocialLogin from './components/SocialLogin/Container';
+  import Room from './components/Room/Container';
+  import SocialLogin from './components/SocialLogin/Container';
 
-export default {
-  name: 'App',
+  export default {
+    name: 'App',
 
-  components: { SocialLogin },
+    components: { Room, SocialLogin },
 
-  computed: {
-    ...mapGetters(['isUser']),
-  },
-};
+    computed: {
+      ...mapGetters({
+        user: 'isUser'
+      }),
+    },
+  };
 </script>
 
 <style>
