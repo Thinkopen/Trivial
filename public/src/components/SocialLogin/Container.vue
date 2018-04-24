@@ -1,5 +1,7 @@
 <template>
-  <FacebookButton/>
+  <div>
+    <FacebookButton/>
+  </div>
 </template>
 
 <script>

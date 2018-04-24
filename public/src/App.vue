@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <img
+      src="./assets/top-white.png"
+      class="main-logo">
 
     <SocialLogin v-if="!isUser"/>
 
@@ -11,7 +13,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import SocialLogin from './components/SocialLogin';
+import SocialLogin from './components/SocialLogin/Container';
 
 export default {
   name: 'App',
@@ -25,12 +27,20 @@ export default {
 </script>
 
 <style>
+body {
+  background: #534292;
+  color: white;
+}
+
+.main-logo {
+  margin-bottom: 30px;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 </style>
