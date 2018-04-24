@@ -83,6 +83,7 @@
     "vue-facebook-signin-button": "^1.0.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
+    "vuex-persistedstate": "^2.5.2",
     "winston": "^2.4.1"
   },
   "jest": {
