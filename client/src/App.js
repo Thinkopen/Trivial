@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import FacebookProvider, { Login } from 'react-facebook';
-import config from 'config';
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   render() {
-    console.log('PROCESS.ENV.NODE_CONFIG_DIR', process.env.NODE_CONFIG_DIR)
-    console.log('config', config.get('facebook.clientId'));
     return (
       <FacebookProvider appId="355272948314470">
         <div className="App">
