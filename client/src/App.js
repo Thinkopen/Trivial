@@ -7,6 +7,7 @@ import { Map } from 'immutable';
 import FacebookProvider, { Login } from 'react-facebook';
 
 import { setUser } from './actions/user';
+import { getRoom } from './actions/room';
 
 import logo from './logo.svg';
 import './App.css';
@@ -16,11 +17,15 @@ class App extends Component {
     isLoading: PropTypes.bool.isRequired,
     settings: ImmutablePropTypes.map.isRequired,
     setUser: PropTypes.func.isRequired,
+    getRoom: PropTypes.func.isRequired,
   }
 
-  handleResponse = (data) => {
-    console.log('response', data);
-    this.props.setUser(data);
+  handleResponse = async (data) => {
+    const { setUser, getRoom } = this.props;
+
+    await setUser(data);
+    const room = await getRoom();
+    console.log('ROOM', room);
   }
   handleError = (error) => {
     console.log('error', error);
@@ -69,6 +74,7 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = dispatch => ({
   setUser: bindActionCreators(setUser, dispatch),
+  getRoom: bindActionCreators(getRoom, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
