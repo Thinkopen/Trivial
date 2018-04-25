@@ -7,7 +7,7 @@
     "node": "9.11.1"
   },
   "scripts": {
-    "client": "cd client && NODE_CONFIG_DIR=../config yarn start",
+    "client": "cd client && yarn start",
     "eslint": "eslint .",
     "start": "node index",
     "pretest": "npm run eslint",

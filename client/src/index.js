@@ -5,17 +5,17 @@ import { List, Map } from 'immutable';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { combineReducers } from 'redux-immutable';
 
-// import rootReducer from './reducers';
+import rootReducer from './reducers';
 import { init as websocketInit, emit } from './actions/websocket';
+import { getSettings } from './actions/settings';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
 
 const initialState = new Map()
-  .set('questions', new List());
+  .set('settings', new Map());
 
 function startUp() {
   let composeEnhancers = compose;
@@ -29,8 +29,9 @@ function startUp() {
 
   const enhancer = composeEnhancers(applyMiddleware(...middleware));
 
-  const store = createStore(combineReducers({}), initialState, enhancer);
+  const store = createStore(rootReducer, initialState, enhancer);
   websocketInit(store); // setup websocket listeners etc
+  getSettings(store);
 
   return store;
 }
