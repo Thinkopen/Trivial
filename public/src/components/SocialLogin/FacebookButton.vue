@@ -11,7 +11,7 @@
 import { mapActions } from 'vuex';
 
 export default {
-  name: 'App',
+  name: 'FacebookButton',
 
   data() {
     return {
@@ -36,7 +36,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
   .fb-signin-button {
     display: inline-block;
     padding: 4px 8px;
