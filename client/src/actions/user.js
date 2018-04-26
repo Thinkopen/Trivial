@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { SET_REQUEST, SET_SUCCESS } from '../constants/user';
+import { init as websocketInit } from '../actions/websocket';
 
 const setUserRequest = () => ({
   type: SET_REQUEST,
@@ -10,7 +11,7 @@ const setUserSuccess = (profile, token) => ({
   token,
 });
 
-export const setUser = user => (dispatch) => {
+export const setUser = user => (dispatch, getState) => {
   dispatch(setUserRequest(user));
 
   return axios.post('auth/validateFacebookToken', {
@@ -18,6 +19,8 @@ export const setUser = user => (dispatch) => {
   })
     .then(({ data: { user: profile, token } }) => {
       dispatch(setUserSuccess(profile, token));
+      websocketInit(dispatch, getState);
+
       return Promise.resolve();
     })
     .catch((error) => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { GET_REQUEST, GET_SUCCESS, GET_ERROR } from '../constants/room';
-import store from '../store';
+import { messageTypes } from '../constants/websocket';
 
 const getRequest = () => ({ type: GET_REQUEST });
 const getSuccess = room => ({
@@ -12,7 +12,7 @@ const getError = error => ({
   error,
 });
 
-export const getRoom = () => (dispatch) => {
+export const getRoom = () => (dispatch, getState, { emit }) => {
   dispatch(getRequest());
 
   // return axios.get('rooms/active')
@@ -20,17 +20,16 @@ export const getRoom = () => (dispatch) => {
     method: 'get',
     url: 'rooms/active',
     headers: {
-      Authorization: `Bearer ${store.getState().getIn(['user', 'token'])}`,
+      Authorization: `Bearer ${getState().getIn(['user', 'token'])}`,
     },
-  })
-    .then(({ data }) => {
-      dispatch(getSuccess(data));
+  }).then(({ data }) => {
+    dispatch(getSuccess(data));
+    emit(messageTypes.join, data.id);
 
-      return Promise.resolve(data);
-    })
-    .catch((error) => {
-      dispatch(getError(error));
+    return Promise.resolve(data);
+  }).catch((error) => {
+    dispatch(getError(error));
 
-      return Promise.reject(error);
-    });
+    return Promise.reject(error);
+  });
 }
