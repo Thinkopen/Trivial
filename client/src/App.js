@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import FacebookProvider, { Login } from 'react-facebook';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
 import { setUser } from './actions/user';
 import { getRoom } from './actions/room';
@@ -16,60 +16,58 @@ class App extends Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
     settings: ImmutablePropTypes.map.isRequired,
+    userLogged: PropTypes.bool.isRequired,
     setUser: PropTypes.func.isRequired,
     getRoom: PropTypes.func.isRequired,
   }
 
-  handleResponse = async (data) => {
-    const { setUser, getRoom } = this.props;
+  handleResponse = (data) => { this.props.setUser(data); }
 
-    await setUser(data);
-    const room = await getRoom();
-    console.log('ROOM', room);
-  }
-  handleError = (error) => {
-    console.log('error', error);
-  }
+  joinRoom = () => { this.props.getRoom(); }
 
-  renderLoginButton = ({ isLoading, isWorking, onClick }) => (
-    <button onClick={onClick}>
-      {
-        (isLoading || isWorking)
-        ? <span>{'Loading...'}</span>
-        : <span>{'Login via Facebook'}</span>
-      }
-    </button>
-  )
+  renderLoginButton = ({ onClick, isProcessing }) => {
+    return (
+      <button onClick={onClick}>
+        {
+          (isProcessing)
+          ? <span>{'Loading...'}</span>
+          : <span>{'Login via Facebook'}</span>
+        }
+      </button>
+    )
+  }
 
   render() {
-    const { isLoading: settingsIsLoading, settings } = this.props;
+    const { isLoading: settingsIsLoading, settings, userLogged } = this.props;
 
     if (!settingsIsLoading) {
       return (
-        <FacebookProvider appId={settings.get('facebookClientId')}>
-          <div className="App">
-            <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
-              <h1 className="App-title">{'Welcome to React'}</h1>
-            </header>
-            <Login
-              scope="email"
-              onResponse={this.handleResponse}
-              onError={this.handleError}
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">{'Welcome to React'}</h1>
+          </header>
+          {!userLogged ?
+            <FacebookLogin
+              autoLoad
+              appId={settings.get('facebookClientId')}
+              fields="name,email,picture"
+              callback={this.handleResponse}
               render={this.renderLoginButton}
             />
-          </div>
-        </FacebookProvider>
+          : <button onClick={this.joinRoom}>{'Join room'}</button>}
+        </div>
       );
     } else {
-      return <p>{'Is Loading'}</p>;
+      return <p>{'Loading configurations..'}</p>;
     }
   }
 }
 
 const mapStateToProps = store => ({
   isLoading: store.get('settings').get('loading'),
-  settings: store.get('settings').get('data') || Map(),
+  settings: store.get('settings').get('data') || new Map(),
+  userLogged: store.get('user').get('logged'),
 });
 
 const mapDispatchToProps = dispatch => ({
