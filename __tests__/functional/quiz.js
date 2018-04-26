@@ -15,6 +15,8 @@ const ioOptions = {
   reconnection: false,
 };
 
+const roomsNamespace = 'rooms';
+
 describe('Functional -> Quiz', () => {
   let client;
   let clientAdmin;
@@ -63,10 +65,28 @@ describe('Functional -> Quiz', () => {
     return app.close();
   });
 
+  test('it should fail if invalid namespace', () => new Promise((resolve, reject) => {
+    connectClient('wrong-namespace', ioOptionsUser);
+
+    const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
+
+    client.on('error', (error) => {
+      clearTimeout(timeout);
+
+      if (error === 'Invalid namespace') {
+        resolve();
+
+        return;
+      }
+
+      reject(error);
+    });
+  }));
+
   test('it should fail if no auth token', () => new Promise((resolve, reject) => {
     delete ioOptionsUser.query;
 
-    connectClient('room-aaa', ioOptionsUser);
+    connectClient(roomsNamespace, ioOptionsUser);
 
     const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
 
@@ -79,14 +99,14 @@ describe('Functional -> Quiz', () => {
         return;
       }
 
-      resolve(error);
+      reject(error);
     });
   }));
 
   test('it should fail if invalid auth token', () => new Promise((resolve, reject) => {
     ioOptionsUser.query = ioOptionsUser.query.replace(/A/g, 'B');
 
-    connectClient('room-aaa', ioOptionsUser);
+    connectClient(roomsNamespace, ioOptionsUser);
 
     const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
 
@@ -99,14 +119,14 @@ describe('Functional -> Quiz', () => {
         return;
       }
 
-      resolve(error);
+      reject(error);
     });
   }));
 
   test('it should fail if auth token of non existing user', () => new Promise((resolve, reject) => {
     ioOptionsUser.query = `auth_token=${jwt.sign({ id: 'aaa' })}`;
 
-    connectClient('room-aaa', ioOptionsUser);
+    connectClient(roomsNamespace, ioOptionsUser);
 
     const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
 
@@ -119,12 +139,14 @@ describe('Functional -> Quiz', () => {
         return;
       }
 
-      resolve(error);
+      reject(error);
     });
   }));
 
   test('it should fails when trying to access a non existing room', () => new Promise((resolve, reject) => {
-    connectClient('room-aaa', ioOptionsUser);
+    connectClient(roomsNamespace, ioOptionsUser);
+
+    client.emit('join', 'aaa');
 
     const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
 
@@ -170,10 +192,11 @@ describe('Functional -> Quiz', () => {
 
   test('it should do the entire quiz', () => requestActiveRoom()
     .then(room => new Promise((resolve, reject) => {
-      const roomNamespace = `room-${room.id}`;
+      connectClient(roomsNamespace, ioOptionsUser);
+      clientAdmin = connectClientAndReturn(roomsNamespace, ioOptionsAdmin);
 
-      connectClient(roomNamespace, ioOptionsUser);
-      clientAdmin = connectClientAndReturn(roomNamespace, ioOptionsAdmin);
+      client.emit('join', room.id);
+      clientAdmin.emit('join', room.id);
 
       const timeout = setTimeout(() => resolve(), 1000);
 
