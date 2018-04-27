@@ -33,3 +33,11 @@ export const getRoom = () => (dispatch, getState, { emit }) => {
     return Promise.reject(error);
   });
 }
+
+export const startQuiz = () => (dispatch, getState, { emit }) => {
+  emit(messageTypes['start quiz']);
+}
+
+export const postAnswer = (payload) => (dispatch, getState, { emit }) => {
+  emit(messageTypes.answer, payload);
+}

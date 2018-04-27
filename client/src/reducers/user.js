@@ -3,7 +3,7 @@ import { SET_REQUEST, SET_SUCCESS, SET_ERROR } from '../constants/user';
 
 // Initial state
 const initialState = fromJS({
-  profile: {},
+  profile: new Map(),
   token: null,
   logged: false,
 });
@@ -17,7 +17,7 @@ const user = (state = initialState, { type, profile, token }) => {
     case SET_SUCCESS:
       return state
         .set('token', token)
-        .set('profile', profile)
+        .set('profile', fromJS(profile))
         .set('logged', true);
 
     default:

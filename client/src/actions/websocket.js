@@ -4,8 +4,10 @@ import { messageTypes, uri } from '../constants/websocket';
 let socket;
 
 const init = (dispatch, getState) => {
+  const user = getState().get('user');
+
   // add listeners to socket messages so we can re-dispatch them as actions
-  socket = io(uri, { query: `auth_token=${getState().get('user').get('token')}&admin=0` });
+  socket = io(uri, { query: `auth_token=${user.get('token')}&admin=${user.getIn(['profile', 'admin']) ? 1 : 0}` });
 
   Object
     .keys(messageTypes)

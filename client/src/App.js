@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
+import LoggedContainer from './LoggedContainer';
+
 import { setUser } from './actions/user';
-import { getRoom } from './actions/room';
 
 import logo from './logo.svg';
 import './App.css';
@@ -18,12 +19,9 @@ class App extends Component {
     settings: ImmutablePropTypes.map.isRequired,
     userLogged: PropTypes.bool.isRequired,
     setUser: PropTypes.func.isRequired,
-    getRoom: PropTypes.func.isRequired,
   }
 
   handleResponse = (data) => { this.props.setUser(data); }
-
-  joinRoom = () => { this.props.getRoom(); }
 
   renderLoginButton = ({ onClick, isProcessing }) => {
     return (
@@ -55,7 +53,7 @@ class App extends Component {
               callback={this.handleResponse}
               render={this.renderLoginButton}
             />
-          : <button onClick={this.joinRoom}>{'Join room'}</button>}
+          : <LoggedContainer />}
         </div>
       );
     } else {
@@ -72,7 +70,6 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = dispatch => ({
   setUser: bindActionCreators(setUser, dispatch),
-  getRoom: bindActionCreators(getRoom, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
