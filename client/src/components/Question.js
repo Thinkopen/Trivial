@@ -16,7 +16,7 @@ class Question extends Component {
 
     return (
       <div>
-        <p>{question.get('text')}</p>
+        <p>{text}</p>
         {answers.map(answer => (
           <Answer
             questionId={id}

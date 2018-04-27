@@ -8,10 +8,10 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import rootReducer from './reducers';
 
-import { init as websocketInit, emit } from './actions/websocket';
+import { emit } from './actions/websocket';
 import { getSettings } from './actions/settings';
 
-import App from './App';
+import App from './components/App/';
 import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';

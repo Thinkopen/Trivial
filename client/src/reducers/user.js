@@ -12,6 +12,7 @@ const initialState = fromJS({
 const user = (state = initialState, { type, profile, token }) => {
   switch (type) {
     case SET_REQUEST:
+    case SET_ERROR:
       return state;
 
     case SET_SUCCESS:

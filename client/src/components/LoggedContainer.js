@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import Question from './Question';
 import Scores from './Scores';
 
-import { getRoom, startQuiz } from './actions/room';
+import { getRoom } from '../actions/room';
+import { startQuiz } from '../actions/quiz';
 
 class LoggedContainer extends Component {
   static propTypes = {

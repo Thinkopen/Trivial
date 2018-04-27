@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { postAnswer } from './actions/room';
+import { postAnswer } from '../actions/quiz';
 
 class Answer extends Component {
   static propTypes = {
@@ -21,7 +21,6 @@ class Answer extends Component {
     const { questionId, answer } = this.props;
     const answerId = answer.get('id');
     const text = answer.get('text');
-    const correct = answer.get('correct');
 
     return <button onClick={this.handleClick({ questionId, answerId })}>{text}</button>;
   }

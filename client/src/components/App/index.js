@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
-import LoggedContainer from './LoggedContainer';
+import LoggedContainer from '../LoggedContainer';
 
-import { setUser } from './actions/user';
+import { setUser } from '../../actions/user';
 
 import logo from './logo.svg';
 import './App.css';
@@ -23,17 +23,15 @@ class App extends Component {
 
   handleResponse = (data) => { this.props.setUser(data); }
 
-  renderLoginButton = ({ onClick, isProcessing }) => {
-    return (
-      <button onClick={onClick}>
-        {
-          (isProcessing)
-          ? <span>{'Loading...'}</span>
-          : <span>{'Login via Facebook'}</span>
-        }
-      </button>
-    )
-  }
+  renderLoginButton = ({ onClick, isProcessing }) => (
+    <button onClick={onClick}>
+      {
+        (isProcessing)
+        ? <span>{'Loading...'}</span>
+        : <span>{'Login via Facebook'}</span>
+      }
+    </button>
+  )
 
   render() {
     const { isLoading: settingsIsLoading, settings, userLogged } = this.props;
