@@ -60,6 +60,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
+    "camelcase": "^5.0.0",
     "config": "^1.30.0",
     "csv-parse": "^2.1.0",
     "express": "^4.16.3",

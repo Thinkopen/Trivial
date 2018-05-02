@@ -1,6 +1,8 @@
 <template>
   <div id="room-container">
     <RoomSelection v-if="!room"/>
+
+    <RoomWaiting v-if="room"/>
   </div>
 </template>
 
@@ -8,11 +10,12 @@
   import { mapGetters } from 'vuex';
 
   import RoomSelection from './RoomSelection';
+  import RoomWaiting from './RoomWaiting';
 
   export default {
     name: 'RoomContainer',
 
-    components: { RoomSelection },
+    components: { RoomSelection, RoomWaiting },
 
     computed: {
       ...mapGetters({

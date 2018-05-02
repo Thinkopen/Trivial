@@ -22,9 +22,7 @@
     components: { Room, SocialLogin },
 
     computed: {
-      ...mapGetters({
-        user: 'isUser'
-      }),
+      ...mapGetters(['user']),
     },
   };
 </script>

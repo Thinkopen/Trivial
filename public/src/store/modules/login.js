@@ -7,19 +7,21 @@ export const state = {
 };
 
 export const getters = {
-  getFacebook: theState => theState.facebook,
-  getGoogle: theState => theState.google,
+  facebook: theState => theState.facebook,
+  google: theState => theState.google,
 
-  isUser: theState => theState.user,
+  user: theState => theState.user,
 };
 
 export const actions = {
-  async setFacebook({ commit }, { userID: userId, accessToken }) {
+  async setFacebook({ commit, dispatch }, { userID: userId, accessToken }) {
     commit('setFacebookId', userId);
 
-    const { user } = await authApi.validateFacebookToken(accessToken);
+    const { user, jwtToken } = await authApi.validateFacebookToken(accessToken);
 
     commit('setUser', user);
+
+    dispatch('initRoomClient', jwtToken, user.admin);
   },
 
   setGoogle({ commit }, userId) {

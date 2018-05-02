@@ -9,10 +9,12 @@ export const getters = {
 };
 
 export const actions = {
-  async retrieveActiveRoom({ commit }) {
+  async retrieveActiveRoom({ commit, dispatch }) {
     const room = await roomsApi.getActive();
 
     commit('setRoom', room);
+
+    dispatch('joinRoom', room.id);
   },
 };
 
