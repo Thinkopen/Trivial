@@ -43,16 +43,14 @@ describe('Functional -> Quiz', () => {
       tokenUser = jwt.sign(user);
       const tokenAdmin = jwt.sign(admin);
 
-      ioOptionsUser = {
-        ...ioOptions,
+      ioOptionsUser = Object.assign({}, ioOptions, {
         query: `auth_token=${tokenUser}`,
-      };
+      });
 
-      ioOptionsAdmin = {
-        ...ioOptions,
+      ioOptionsAdmin = Object.assign({}, ioOptions, {
         query: `auth_token=${tokenAdmin}&admin=1`,
         forceNew: true,
-      };
+      });
     })
     .then(() => Question.importFromArr([
       ['question-1', 'answer-1-1-right', 'answer-1-2-wrong'],
