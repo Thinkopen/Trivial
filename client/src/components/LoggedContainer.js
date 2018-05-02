@@ -26,27 +26,27 @@ class LoggedContainer extends Component {
   joinRoom = () => { this.props.getRoom(); }
   startQuiz = () => { this.props.startQuiz(); }
 
-  renderJoinRoom = () => (
-    <Transition in={} timeout={{
-      enter: 0,
-      exit: duration
-    }}>
-      {
-        (status) => {
-          // Don't render anything if component has "exited".
-          if (status === 'exited') {
-            return null
-          }
-          return (
-            <div>
-              <h2>{`Welcome ${this.props.user.get('name')}`}</h2>
-              <Button onClick={this.joinRoom}>{'Join room'}</Button>
-            </div>
-          );
-        }
-      }
-    </Transition>
-  );
+  // renderJoinRoom = () => (
+  //   <Transition in={} timeout={{
+  //     enter: 0,
+  //     exit: duration
+  //   }}>
+  //     {
+  //       (status) => {
+  //         // Don't render anything if component has "exited".
+  //         if (status === 'exited') {
+  //           return null
+  //         }
+  //         return (
+  //           <div>
+  //             <h2>{`Welcome ${this.props.user.get('name')}`}</h2>
+  //             <Button onClick={this.joinRoom}>{'Join room'}</Button>
+  //           </div>
+  //         );
+  //       }
+  //     }
+  //   </Transition>
+  // );
 
   render() {
     const { room, user, quiz } = this.props;
@@ -54,7 +54,12 @@ class LoggedContainer extends Component {
     const scores = quiz.get('scores');
 
     if (!room.get('id')) {
-      return this.renderJoinRoom();
+      return (
+        <div>
+          <h2>{`Welcome ${this.props.user.get('name')}`}</h2>
+          <Button onClick={this.joinRoom}>{'Join room'}</Button>
+        </div>
+      );
     } else if (user.get('admin')) {
       return <button onClick={this.startQuiz}>{'Start questions'}</button>;
     } else if (scores.size) {
