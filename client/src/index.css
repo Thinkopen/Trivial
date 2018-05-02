@@ -2,4 +2,17 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background-image: url('./images/question-pattern.jpg');
+  background-position: center;
+  background-repeat: repeat;
+}
+
+.fade {
+  transition: ease-in 0.15s;
+  transition-property: opacity, transform;
+}
+
+.fade-entering {
+  opacity: 0
+  transform: translateY(-10%);
 }

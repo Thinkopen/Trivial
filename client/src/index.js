@@ -11,7 +11,7 @@ import rootReducer from './reducers';
 import { emit } from './actions/websocket';
 import { getSettings } from './actions/settings';
 
-import App from './components/App/';
+import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
@@ -30,7 +30,6 @@ const initStore = () => {
   }
 
   const enhancer = composeEnhancers(applyMiddleware(...middleware));
-
   const store = createStore(rootReducer, initialState, enhancer);
 
   getSettings(store);
