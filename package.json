@@ -9,6 +9,7 @@
   "scripts": {
     "client": "cd client && yarn start",
     "eslint": "eslint .",
+    "heroku-postbuild": "cd client && yarn build",
     "start": "node index",
     "pretest": "npm run eslint",
     "test": "jest --coverage",
