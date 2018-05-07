@@ -19,6 +19,7 @@ class Question extends Component {
         <p>{text}</p>
         {answers.map(answer => (
           <Answer
+            key={answer.id}
             questionId={id}
             answer={answer}
           />
