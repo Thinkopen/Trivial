@@ -1,5 +1,7 @@
 const config = require('config');
 
+const Question = require('../models/question');
+
 const AbstractController = require('.');
 
 class SettingsController extends AbstractController {
@@ -7,17 +9,19 @@ class SettingsController extends AbstractController {
     this.router.get('/', SettingsController.actionList);
   }
 
-  static actionList(request, response) {
+  static async actionList(request, response) {
     const environment = config.get('environment');
     const baseUrl = config.get('server.baseUrl');
     const quiz = config.get('quiz');
     const facebookClientId = config.get('facebook.clientId');
+    const questionsCount = await Question.count();
 
     response.json({
       environment,
       baseUrl,
       quiz,
       facebookClientId,
+      questionsCount,
     });
   }
 }
