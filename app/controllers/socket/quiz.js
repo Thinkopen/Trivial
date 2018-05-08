@@ -82,7 +82,7 @@ class SocketQuiz {
 
   async handleStart(socket) {
     const questions = await Question.findAll({
-      limit: 10,
+      limit: config.get('quiz.questionsCount'),
       order: sequelize.random(),
     });
 
