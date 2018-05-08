@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
-
-import { postAnswer } from '../actions/quiz';
 
 const ButtonFull = styled(Button)`
   width: 80%;
@@ -22,7 +18,14 @@ class Answer extends Component {
     readOnly: PropTypes.bool.isRequired,
   }
 
-  handleClick = (payload) => () => {
+  constructor() {
+    super();
+
+    this.state = { answered: false };
+  }
+
+  handleClick = payload => () => {
+    this.setState({ answered: true });
     this.props.postAnswer(payload);
   }
 
@@ -34,6 +37,7 @@ class Answer extends Component {
     return (
       <ButtonFull
         onClick={this.handleClick({ questionId, answerId })}
+        bsStyle={this.state.answered ? 'primary' : 'default'}
         disabled={readOnly}
       >
         {text}
@@ -42,10 +46,4 @@ class Answer extends Component {
   }
 }
 
-const mapStateToProps = () => ({});
-
-const mapDispatchToProps = dispatch => ({
-  postAnswer: bindActionCreators(postAnswer, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Answer);
+export default Answer;

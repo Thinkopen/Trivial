@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from "styled-components";
 import { Panel, ProgressBar } from 'react-bootstrap';
@@ -8,6 +9,8 @@ import renderHTML from 'react-render-html';
 
 import Countdown from './Countdown';
 import Answer from './Answer';
+
+import { postAnswer } from '../actions/quiz';
 
 const PanelStyled = styled(Panel)`
   text-align: left;
@@ -27,10 +30,31 @@ class Question extends Component {
     totalQuestions: PropTypes.number.isRequired,
     timeoutQuestion: PropTypes.number.isRequired,
     isAdmin: PropTypes.bool.isRequired,
+    postAnswer: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     answeredQuestions: 0,
+  }
+
+  constructor() {
+    super();
+
+    this.state = { answered: false };
+  }
+
+  componentDidUpdate({ currentQuestion: nextCurrentQuestion }) {
+    const nextQuestionId = nextCurrentQuestion.get('id');
+    const questionId = this.props.currentQuestion.get('id');
+
+    nextQuestionId !== questionId && this.setState({
+      answered: false
+    });
+  }
+
+  postAnswer = (payload) => {
+    this.setState({ answered: true });
+    this.props.postAnswer(payload);
   }
 
   render() {
@@ -64,7 +88,8 @@ class Question extends Component {
             key={answer.get('id')}
             questionId={questionId}
             answer={answer}
-            readOnly={isAdmin}
+            postAnswer={this.postAnswer}
+            readOnly={isAdmin || this.state.answered}
           />
         ))}
       </div>
@@ -87,4 +112,8 @@ const mapStateToProps = state => ({
   ]),
 });
 
-export default connect(mapStateToProps)(Question);
+const mapDispatchToProps = dispatch => ({
+  postAnswer: bindActionCreators(postAnswer, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Question);
