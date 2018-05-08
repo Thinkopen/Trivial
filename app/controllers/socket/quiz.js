@@ -124,6 +124,7 @@ class SocketQuiz {
 
     const score = this.room.users
       .map(user => ({
+        userId: user.id,
         name: user.name,
         score: user.roomUser.score,
       }))
