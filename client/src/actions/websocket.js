@@ -1,14 +1,15 @@
 import io from 'socket.io-client';
-import { messageTypes, uri } from '../constants/websocket';
+import { messageTypes } from '../constants/websocket';
 
 let socket;
 
 const init = (dispatch, getState) => {
   const user = getState().get('user');
+  const uri = getState().getIn(['settings', 'data', 'baseUrl']);
 
   // add listeners to socket messages so we can re-dispatch them as actions
   socket = io(
-    uri,
+    `${uri}/rooms`,
     {
       query: `auth_token=${user.get('token')}&admin=${user.getIn(['profile', 'admin']) ? 1 : 0}`,
       transports: ['websocket', 'polling']
