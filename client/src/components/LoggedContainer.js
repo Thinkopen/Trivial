@@ -33,19 +33,27 @@ class LoggedContainer extends Component {
     if (!room.get('id')) {
       return (
         <div>
-          <h2>{`Welcome ${this.props.user.get('name')}`}</h2>
-          <Button onClick={this.joinRoom}>{'Join room'}</Button>
+          <h2 className="title">{`Welcome ${this.props.user.get('name')}`}</h2>
+          <Button className="go-bottom" onClick={this.joinRoom}>{'Join room'}</Button>
         </div>
       );
-    } else if (user.get('admin')) {
-      return <Button onClick={this.startQuiz}>{'Start questions'}</Button>;
     } else if (scores.size) {
-      return <Scores scores={scores} />
+      return <Scores scores={scores} />;
     } else if (questions.size) {
-      return <Question question={questions.last()} />
+      return (
+        <Question
+          currentQuestion={questions.last()}
+          answeredQuestions={questions.size}
+          totalQuestions={10}
+          isAdmin={user.get('admin')}
+        />
+      );
     }
 
-    return <span>{'Wait for start'}</span>
+    return [
+      <div key="loading">{'Waiting to start'}</div>,
+      user.get('admin') && <Button key="start" onClick={this.startQuiz}>{'Start quiz'}</Button>,
+    ];
   }
 }
 

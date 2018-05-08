@@ -7,12 +7,16 @@ body {
   background-repeat: repeat;
 }
 
-.fade-enter {
-  opacity: 0;
-  z-index: 1;
+.title {
+  margin: 0;
+  color: #3A559F;
+  text-shadow: 0 0 5px white;
+  margin-bottom: 20px;
 }
 
-.fade-enter.fade-enter-active {
-  opacity: 1;
-  transition: opacity 250ms ease-in;
+.go-bottom {
+  bottom: 20px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
