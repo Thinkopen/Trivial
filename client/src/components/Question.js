@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from "styled-components";
 import { Panel, ProgressBar } from 'react-bootstrap';
 import renderHTML from 'react-render-html';
 
+import Countdown from './Countdown';
 import Answer from './Answer';
 
 const PanelStyled = styled(Panel)`
@@ -13,11 +15,17 @@ const PanelStyled = styled(Panel)`
   margin-bottom: 40px;
 `;
 
+const QuestionCounter = styled.h4`
+  font-weight: bold;
+  color: #377BB5;
+`;
+
 class Question extends Component {
   static propTypes = {
     currentQuestion: ImmutablePropTypes.map.isRequired,
     answeredQuestions: PropTypes.number,
     totalQuestions: PropTypes.number.isRequired,
+    timeoutQuestion: PropTypes.number.isRequired,
     isAdmin: PropTypes.bool.isRequired,
   }
 
@@ -30,18 +38,23 @@ class Question extends Component {
       currentQuestion,
       answeredQuestions,
       totalQuestions,
+      timeoutQuestion,
       isAdmin,
     } = this.props;
-    const id = currentQuestion.get('id');
+    const questionId = currentQuestion.get('id');
     const text = currentQuestion.get('text').replace(/\\n/g, '<br/>');
     const answers = currentQuestion.get('answers');
 
     return (
       <div>
         <PanelStyled>
-          <h4><b>{`Question ${answeredQuestions}`}</b></h4>
+          <QuestionCounter>{`Question ${answeredQuestions}`}</QuestionCounter>
+          <Countdown
+            questionId={questionId}
+            timeout={timeoutQuestion}
+          />
           <ProgressBar
-            now={answeredQuestions * 100 / totalQuestions}
+            now={answeredQuestions / totalQuestions * 100}
             style={{ height: 10 }}
           />
           <p>{renderHTML(text)}</p>
@@ -49,7 +62,7 @@ class Question extends Component {
         {answers.map(answer => (
           <Answer
             key={answer.get('id')}
-            questionId={id}
+            questionId={questionId}
             answer={answer}
             readOnly={isAdmin}
           />
@@ -59,4 +72,19 @@ class Question extends Component {
   }
 }
 
-export default Question;
+const mapStateToProps = state => ({
+  timeoutQuestion: state.getIn([
+    'settings',
+    'data',
+    'quiz',
+    'nextQuestionTimeout',
+  ]),
+  totalQuestions: state.getIn([
+    'settings',
+    'data',
+    'quiz',
+    'questionsCount',
+  ]),
+});
+
+export default connect(mapStateToProps)(Question);

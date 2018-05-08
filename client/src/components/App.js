@@ -57,6 +57,7 @@ class App extends Component {
                   fields="name,email,picture"
                   icon="fa-facebook"
                   callback={this.handleResponse}
+                  className="go-bottom"
                 />
               :
                 <LoggedContainer />

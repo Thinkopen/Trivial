@@ -44,7 +44,6 @@ class LoggedContainer extends Component {
         <Question
           currentQuestion={questions.last()}
           answeredQuestions={questions.size}
-          totalQuestions={10}
           isAdmin={user.get('admin')}
         />
       );
