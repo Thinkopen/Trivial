@@ -188,13 +188,18 @@ describe('Functional -> Quiz', () => {
     }, 2000);
   }
 
+  let roomN1;
+  let roomN2;
+
   test('it should do the entire quiz', () => requestActiveRoom()
     .then(room => new Promise((resolve, reject) => {
+      roomN1 = room;
+
       connectClient(roomsNamespace, ioOptionsUser);
       clientAdmin = connectClientAndReturn(roomsNamespace, ioOptionsAdmin);
 
-      client.emit('join', room.id);
-      clientAdmin.emit('join', room.id);
+      client.emit('join', roomN1.id);
+      clientAdmin.emit('join', roomN1.id);
 
       const timeout = setTimeout(() => resolve(), 1000);
 
@@ -249,5 +254,11 @@ describe('Functional -> Quiz', () => {
       expect(score).toHaveLength(1);
       expect(score).toHaveProperty('0.name', 'foo');
       expect(score).toHaveProperty('0.score', 10);
+
+      return requestActiveRoom();
+    })
+    .then((room) => {
+      expect(room).toBeDefined();
+      expect(room.id).not.toBe(roomN1.id);
     }));
 });
