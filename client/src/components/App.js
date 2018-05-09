@@ -16,11 +16,16 @@ import { setUser } from '../actions/user';
 
 const Container = styled(Grid)`
   text-align: center;
-  margin-top: 50px;
+  height: 100vh;
 `;
 
 const PanelContainer = styled(Panel)`
   padding: 25px;
+  background-color: rgba(255, 255, 255, .8);
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 95%;
 `;
 
 
@@ -52,6 +57,7 @@ class App extends Component {
                   fields="name,email,picture"
                   icon="fa-facebook"
                   callback={this.handleResponse}
+                  className="go-bottom"
                 />
               :
                 <LoggedContainer />
