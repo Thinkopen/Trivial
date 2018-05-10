@@ -14,13 +14,14 @@ class Scores extends Component {
   static propTypes = {
     scores: ImmutablePropTypes.list.isRequired,
     loggedUserId: PropTypes.string.isRequired,
+    userPicture: PropTypes.string.isRequired,
   }
 
   renderPosition = (position) => {
     if (position <= 3) {
       return (
         <i
-          className={`fas fa-trophy`}
+          className={'fas fa-trophy'}
           style={{ color: podiumColors[position] }}
         />
       );
@@ -30,18 +31,21 @@ class Scores extends Component {
   }
 
   render() {
-    const { loggedUserId, scores } = this.props;
+    const { loggedUserId, userPicture, scores } = this.props;
 
     return [
       <h2 key="title" className="title">{"Scores"}</h2>,
 
       <ListGroup key="scores" style={{ textAlign: 'left' }}>
-        {scores.map((score, index) => (
+        {scores
+          .sort(score => score.get('score'))
+          .map((score, index) => (
           <ListGroupItem
             key={score.get('name')}
             bsStyle={loggedUserId === score.get('userId') ? 'info' : 'default'}
           >
             {this.renderPosition(index + 1)}
+            {/* <img src={userPicture} /> */}
             {` ${score.get('name')}`}
             <span style={{ float: 'right' }}>
               {`${score.get('score')} pt.`}
@@ -54,7 +58,8 @@ class Scores extends Component {
 }
 
 const mapStateToProps = state => ({
-  loggedUserId: state.getIn(['user', 'profile', 'id'])
+  loggedUserId: state.getIn(['user', 'profile', 'id']),
+  userPicture: state.getIn(['user', 'profile', 'picture']),
 });
 
 export default connect(mapStateToProps)(Scores);

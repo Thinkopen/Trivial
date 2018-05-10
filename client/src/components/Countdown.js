@@ -20,6 +20,9 @@ const progressbarStyle = {
   path: {
     stroke: '#377BB5',
   },
+  trail: {
+    stroke: 'white',
+  },
 };
 
 class Countdown extends Component {

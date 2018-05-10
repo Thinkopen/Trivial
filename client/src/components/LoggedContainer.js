@@ -34,7 +34,14 @@ class LoggedContainer extends Component {
       return (
         <div>
           <h2 className="title">{`Welcome ${this.props.user.get('name')}`}</h2>
-          <Button className="go-bottom" onClick={this.joinRoom}>{'Join room'}</Button>
+          <Button
+            className="go-bottom"
+            onClick={this.joinRoom}
+            bsSize="large"
+            style={{ width: '50%' }}
+          >
+            {'Join room'}
+          </Button>
         </div>
       );
     } else if (scores.size) {
@@ -50,8 +57,14 @@ class LoggedContainer extends Component {
     }
 
     return [
-      <div key="loading">{'Waiting to start'}</div>,
-      user.get('admin') && <Button key="start" onClick={this.startQuiz}>{'Start quiz'}</Button>,
+      <div key="loading">{'Get ready!'}</div>,
+      user.get('admin') && <Button
+        key="start"
+        onClick={this.startQuiz}
+        bsSize="large"
+      >
+        {'Start quiz'}
+      </Button>,
     ];
   }
 }
