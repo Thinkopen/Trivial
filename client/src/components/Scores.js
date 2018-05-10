@@ -38,7 +38,7 @@ class Scores extends Component {
 
       <ListGroup key="scores" style={{ textAlign: 'left' }}>
         {scores
-          .sort(score => score.get('score'))
+          .sort(score => -score.get('score'))
           .map((score, index) => (
           <ListGroupItem
             key={score.get('name')}
