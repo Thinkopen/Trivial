@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import FacebookLogin from 'react-facebook-login';
 import styled from 'styled-components';
 import { Grid, Panel } from 'react-bootstrap';
 
+import LoginContainer from './LoginContainer';
 import LoggedContainer from './LoggedContainer';
 
 import { setUser } from '../actions/user';
@@ -21,6 +20,7 @@ const Container = styled(Grid)`
 
 const PanelContainer = styled(Panel)`
   padding: 25px;
+  overflow: auto;
   background-color: rgba(255, 255, 255, .8);
   position: relative;
   top: 50%;
@@ -37,7 +37,9 @@ class App extends Component {
     setUser: PropTypes.func.isRequired,
   }
 
-  handleResponse = (data) => { this.props.setUser(data); }
+  handleLoginResponse = (data) => {
+    this.props.setUser(data);
+  }
 
   render() {
     const {
@@ -46,23 +48,18 @@ class App extends Component {
       userLogged,
     } = this.props;
 
-      return (
-        <Container>
-          <PanelContainer>
-            {!settingsIsLoading ?
-              !userLogged ?
-                <FacebookLogin
-                  autoLoad
-                  appId={settings.get('facebookClientId')}
-                  fields="name,email,picture"
-                  icon="fa-facebook"
-                  callback={this.handleResponse}
-                  className="go-bottom"
-                />
-              :
-                <LoggedContainer />
-            : <p>{'Loading configurations..'}</p>
-          }
+    return (
+      <Container>
+        <PanelContainer>
+          {!settingsIsLoading ?
+            !userLogged ?
+              <LoginContainer
+                facebookClientId={settings.get('facebookClientId')}
+                handleLoginResponse={this.handleLoginResponse}
+              />
+            :
+              <LoggedContainer />
+          : <p>{'Loading configurations..'}</p>}
         </PanelContainer>
       </Container>
     );
