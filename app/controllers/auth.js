@@ -1,5 +1,6 @@
 const jwt = require('../libraries/jwt');
 const facebook = require('../libraries/social/facebook');
+const google = require('../libraries/social/google');
 
 const User = require('../models/user');
 
@@ -8,6 +9,7 @@ const AbstractController = require('.');
 class AuthController extends AbstractController {
   initRouter() {
     this.router.post('/validateFacebookToken', AuthController.validateFromSocial(facebook));
+    this.router.post('/validateGoogleToken', AuthController.validateFromSocial(google));
   }
 
   static validateFromSocial(social) {

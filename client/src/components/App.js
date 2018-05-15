@@ -55,6 +55,7 @@ class App extends Component {
             !userLogged ?
               <LoginContainer
                 facebookClientId={settings.get('facebookClientId')}
+                googleClientId={settings.get('googleClientId')}
                 handleLoginResponse={this.handleLoginResponse}
               />
             :

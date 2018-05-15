@@ -16,6 +16,7 @@
     "react-circular-progressbar": "^0.8.0",
     "react-dom": "^16.3.1",
     "react-facebook-login": "^4.0.1",
+    "react-google-login-component": "^0.9.3",
     "react-immutable-proptypes": "^2.1.0",
     "react-redux": "^5.0.7",
     "react-render-html": "^0.6.0",

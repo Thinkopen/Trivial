@@ -39,5 +39,10 @@
   "facebook": {
     "clientId": "355272948314470",
     "clientSecret": ""
+  },
+
+  "google": {
+    "clientId": "1073145809592-c7r93fi3tbuiirsp0p4r6ndjl7vputae.apps.googleusercontent.com",
+    "clientSecret": ""
   }
 }

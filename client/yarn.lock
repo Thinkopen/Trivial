@@ -6,12 +6,6 @@
   version "10.0.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.0.5.tgz#08c97d0e8ef6ea8ed1df119c839834ffb9e0321a"
 
-"@types/react@*":
-  version "16.3.14"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.3.14.tgz#f90ac6834de172e13ecca430dcb6814744225d36"
-  dependencies:
-    csstype "^2.2.0"
-
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -1921,10 +1915,6 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   resolved "https://registry.yarnpkg.com/cssstyle/-/cssstyle-0.2.37.tgz#541097234cb2513c83ceed3acddc27ff27987d54"
   dependencies:
     cssom "0.3.x"
-
-csstype@^2.2.0:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.5.1.tgz#654231d1ddddfc3eb93da281a1144e7c14fc0bdc"
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -5788,12 +5778,9 @@ react-facebook-login@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-facebook-login/-/react-facebook-login-4.0.1.tgz#7d43672ee86e3f2cd9e8758de1e61eb66a212611"
 
-react-google-login@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-3.2.1.tgz#9ab6ac3694d0e6e2974f1e588c53cf7b903a36e6"
-  dependencies:
-    "@types/react" "*"
-    prop-types "^15.6.0"
+react-google-login-component@^0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/react-google-login-component/-/react-google-login-component-0.9.3.tgz#e1f114bb7fc8d1791ae93de1d4e4c0608d3d745f"
 
 react-immutable-proptypes@^2.1.0:
   version "2.1.0"

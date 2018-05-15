@@ -14,6 +14,7 @@ class SettingsController extends AbstractController {
     const baseUrl = config.get('server.baseUrl');
     const quiz = config.get('quiz');
     const facebookClientId = config.get('facebook.clientId');
+    const googleClientId = config.get('google.clientId');
     const questionsCount = await Question.count({ limit: config.get('quiz.questionsCount') });
 
     response.json({
@@ -21,6 +22,7 @@ class SettingsController extends AbstractController {
       baseUrl,
       quiz,
       facebookClientId,
+      googleClientId,
       questionsCount,
     });
   }
