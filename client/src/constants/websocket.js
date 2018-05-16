@@ -1,14 +1,10 @@
-const port = 3000;
-const host = 'localhost';
+import { createSocketConstants } from '../utils';
 
 // makes an object of the form {userJoined: 'userJoined'}
-const messageTypes = [
-  'startQuiz',
-].reduce((result, msg) => Object.assign(result, { [msg]: msg }), {});
-
-module.exports = {
-  port,
-  host,
-  messageTypes,
-  uri: `http://${host}:${port}`,
-};
+export const messageTypes = createSocketConstants([
+  'join',
+  'start quiz',
+  'question',
+  'score',
+  'answer',
+]);

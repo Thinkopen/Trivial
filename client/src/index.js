@@ -1,23 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { List, Map } from 'immutable';
+
+import { Map } from 'immutable';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { combineReducers } from 'redux-immutable';
+import rootReducer from './reducers';
 
-// import rootReducer from './reducers';
-import { init as websocketInit, emit } from './actions/websocket';
-import App from './App';
+import { emit } from './actions/websocket';
+import { getSettings } from './actions/settings';
+
+import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
 
 const initialState = new Map()
-  .set('questions', new List());
+  .set('settings', new Map());
 
-function startUp() {
+const initStore = () => {
   let composeEnhancers = compose;
   const middleware = [thunkMiddleware.withExtraArgument({ emit })];
 
@@ -28,16 +30,15 @@ function startUp() {
   }
 
   const enhancer = composeEnhancers(applyMiddleware(...middleware));
+  const store = createStore(rootReducer, initialState, enhancer);
 
-  const store = createStore(combineReducers({}), initialState, enhancer);
-  websocketInit(store); // setup websocket listeners etc
+  getSettings(store);
 
   return store;
 }
 
-
 ReactDOM.render(
-  <Provider store={startUp()}>
+  <Provider store={initStore()}>
     <App />
   </Provider>,
   document.getElementById('root'),

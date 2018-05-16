@@ -3,7 +3,7 @@
 
   "server": {
     "logFormat": "combined",
-    "baseUrl": "https://top-trivial-staging.herokuapp.com"
+    "baseUrl": "https://thinkopen-trivial-staging.herokuapp.com/"
   },
 
   "database": {

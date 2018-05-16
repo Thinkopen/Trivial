@@ -27,7 +27,8 @@
   },
 
   "quiz": {
-    "nextQuestionTimeout": 30000
+    "nextQuestionTimeout": 30000,
+    "questionsCount": 10
   },
 
   "jwt": {

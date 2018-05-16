@@ -15,6 +15,8 @@ const ioOptions = {
   reconnection: false,
 };
 
+const roomsNamespace = 'rooms';
+
 describe('Functional -> Quiz', () => {
   let client;
   let clientAdmin;
@@ -41,16 +43,14 @@ describe('Functional -> Quiz', () => {
       tokenUser = jwt.sign(user);
       const tokenAdmin = jwt.sign(admin);
 
-      ioOptionsUser = {
-        ...ioOptions,
+      ioOptionsUser = Object.assign({}, ioOptions, {
         query: `auth_token=${tokenUser}`,
-      };
+      });
 
-      ioOptionsAdmin = {
-        ...ioOptions,
+      ioOptionsAdmin = Object.assign({}, ioOptions, {
         query: `auth_token=${tokenAdmin}&admin=1`,
         forceNew: true,
-      };
+      });
     })
     .then(() => Question.importFromArr([
       ['question-1', 'answer-1-1-right', 'answer-1-2-wrong'],
@@ -63,10 +63,28 @@ describe('Functional -> Quiz', () => {
     return app.close();
   });
 
+  test('it should fail if invalid namespace', () => new Promise((resolve, reject) => {
+    connectClient('wrong-namespace', ioOptionsUser);
+
+    const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
+
+    client.on('error', (error) => {
+      clearTimeout(timeout);
+
+      if (error === 'Invalid namespace') {
+        resolve();
+
+        return;
+      }
+
+      reject(error);
+    });
+  }));
+
   test('it should fail if no auth token', () => new Promise((resolve, reject) => {
     delete ioOptionsUser.query;
 
-    connectClient('room-aaa', ioOptionsUser);
+    connectClient(roomsNamespace, ioOptionsUser);
 
     const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
 
@@ -79,14 +97,14 @@ describe('Functional -> Quiz', () => {
         return;
       }
 
-      resolve(error);
+      reject(error);
     });
   }));
 
   test('it should fail if invalid auth token', () => new Promise((resolve, reject) => {
     ioOptionsUser.query = ioOptionsUser.query.replace(/A/g, 'B');
 
-    connectClient('room-aaa', ioOptionsUser);
+    connectClient(roomsNamespace, ioOptionsUser);
 
     const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
 
@@ -99,14 +117,14 @@ describe('Functional -> Quiz', () => {
         return;
       }
 
-      resolve(error);
+      reject(error);
     });
   }));
 
   test('it should fail if auth token of non existing user', () => new Promise((resolve, reject) => {
     ioOptionsUser.query = `auth_token=${jwt.sign({ id: 'aaa' })}`;
 
-    connectClient('room-aaa', ioOptionsUser);
+    connectClient(roomsNamespace, ioOptionsUser);
 
     const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
 
@@ -119,12 +137,14 @@ describe('Functional -> Quiz', () => {
         return;
       }
 
-      resolve(error);
+      reject(error);
     });
   }));
 
   test('it should fails when trying to access a non existing room', () => new Promise((resolve, reject) => {
-    connectClient('room-aaa', ioOptionsUser);
+    connectClient(roomsNamespace, ioOptionsUser);
+
+    client.emit('join', 'aaa');
 
     const timeout = setTimeout(() => reject(new Error('Socket didn\'t fail')), 1000);
 
@@ -168,12 +188,18 @@ describe('Functional -> Quiz', () => {
     }, 2000);
   }
 
+  let roomN1;
+  let roomN2;
+
   test('it should do the entire quiz', () => requestActiveRoom()
     .then(room => new Promise((resolve, reject) => {
-      const roomNamespace = `room-${room.id}`;
+      roomN1 = room;
 
-      connectClient(roomNamespace, ioOptionsUser);
-      clientAdmin = connectClientAndReturn(roomNamespace, ioOptionsAdmin);
+      connectClient(roomsNamespace, ioOptionsUser);
+      clientAdmin = connectClientAndReturn(roomsNamespace, ioOptionsAdmin);
+
+      client.emit('join', roomN1.id);
+      clientAdmin.emit('join', roomN1.id);
 
       const timeout = setTimeout(() => resolve(), 1000);
 
@@ -228,5 +254,11 @@ describe('Functional -> Quiz', () => {
       expect(score).toHaveLength(1);
       expect(score).toHaveProperty('0.name', 'foo');
       expect(score).toHaveProperty('0.score', 10);
+
+      return requestActiveRoom();
+    })
+    .then((room) => {
+      expect(room).toBeDefined();
+      expect(room.id).not.toBe(roomN1.id);
     }));
 });

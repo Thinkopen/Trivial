@@ -14,28 +14,18 @@ const User = require('../../models/user');
 const AbstractController = require('..');
 
 class SocketQuiz {
-  static get roomNameRegex() { return /^\/room-(.+)$/; }
-
-  static parseRoomInfo(name) {
-    const [, roomId] = SocketQuiz.roomNameRegex.exec(name);
-
-    return { roomId };
-  }
-
-  static getInstance(socket) {
+  static getInstance(io, roomId) {
     SocketQuiz.rooms = SocketQuiz.rooms || {};
 
-    const { roomId } = SocketQuiz.parseRoomInfo(socket.nsp.name);
-
     if (!SocketQuiz.rooms[roomId]) {
-      SocketQuiz.rooms[roomId] = new SocketQuiz(socket, roomId);
+      SocketQuiz.rooms[roomId] = new SocketQuiz(io, roomId);
     }
 
     return SocketQuiz.rooms[roomId];
   }
 
-  constructor(socket, roomId) {
-    this.namespace = socket.nsp;
+  constructor(io, roomId) {
+    this.io = io.to(roomId);
     this.roomId = roomId;
   }
 
@@ -49,7 +39,9 @@ class SocketQuiz {
       return;
     }
 
-    socket.on('start quiz', () => this.handleStart());
+    socket.join(this.roomId);
+
+    socket.on('start quiz', () => this.handleStart(socket));
     socket.on('answer', payload => this.handleAnswer(socket, payload));
 
     await this.fetchRoom();
@@ -88,12 +80,13 @@ class SocketQuiz {
     }
   }
 
-  async handleStart() {
+  async handleStart(socket) {
     const questions = await Question.findAll({
-      limit: 10,
+      limit: config.get('quiz.questionsCount'),
       order: sequelize.random(),
     });
 
+    await this.room.removeUser(socket.request.user);
     await this.room.setStarted();
 
     await Promise.all(questions.map((question, index) => this.room.addQuestion(question, { through: { order: index } })));
@@ -119,7 +112,7 @@ class SocketQuiz {
 
     await this.question.roomQuestion.setStarted();
 
-    this.namespace.emit('question', this.question);
+    this.io.emit('question', this.question);
 
     this.nextQuestionTimeout = setTimeout(() => this.emitNextQuestion(), config.get('quiz.nextQuestionTimeout'));
   }
@@ -131,12 +124,13 @@ class SocketQuiz {
 
     const score = this.room.users
       .map(user => ({
+        userId: user.id,
         name: user.name,
         score: user.roomUser.score,
       }))
       .sort((a, b) => a.score - b.score);
 
-    this.namespace.emit('score', score);
+    this.io.emit('score', score);
   }
 
   async handleAnswer(socket, { questionId, answerId }) {
@@ -158,16 +152,27 @@ class SocketQuiz {
       .find(user => user.id === socket.request.user.id)
       .roomUser
       .addAnswer(answer, { through: { answeredAfter } });
+
+    this.question.tmpUsers = this.question.tmpUsers || [];
+    this.question.tmpUsers.push(socket.request.id);
+
+    if (this.question.tmpUsers.length === this.room.users.length) {
+      clearTimeout(this.nextQuestionTimeout);
+
+      await this.emitNextQuestion();
+    }
   }
 }
 
 class SocketQuizController extends AbstractController {
   initRouter() {
-    const room = this.io.of(SocketQuiz.roomNameRegex);
+    const ioRooms = this.io.of('rooms');
 
-    room.use(jwtAuth.authenticate({ secret: jwt.secretOrKey }, jwt.handlePayload));
+    ioRooms.use(jwtAuth.authenticate({ secret: jwt.secretOrKey }, jwt.handlePayload));
 
-    room.on('connect', socket => SocketQuiz.getInstance(socket).handleConnect(socket));
+    ioRooms.on('connect', (socket) => {
+      socket.on('join', roomId => SocketQuiz.getInstance(ioRooms, roomId).handleConnect(socket));
+    });
   }
 }
 
