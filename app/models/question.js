@@ -47,7 +47,7 @@ Question.prototype.toJSON = function toJSON() {
 };
 
 Question.importFromCsv = async function importFromCsv(csv) {
-  const questionsArr = parse(csv, { rtrim: true });
+  const questionsArr = parse(csv, { rtrim: true, relax_column_count: true });
 
   return Question.importFromArr(questionsArr);
 };
