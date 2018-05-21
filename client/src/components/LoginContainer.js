@@ -15,7 +15,7 @@ class LoginContainer extends Component {
   render() {
     const { facebookClientId } = this.props;
 
-    return [
+    return (
       <FacebookLogin
         autoLoad
         appId={facebookClientId}
@@ -24,7 +24,7 @@ class LoginContainer extends Component {
         callback={this.handleLoginResponse}
         className="go-bottom"
       />
-    ];
+    );
   }
 }
 
