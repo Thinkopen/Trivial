@@ -63,3 +63,4 @@ typings/
 .next
 
 config/local.json
+trivial.db
