@@ -3,12 +3,24 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import styled from 'styled-components';
 
 const podiumColors = {
   1: '#fdd530',
   2: '#cccccc',
   3: '#cb7f3b',
 }
+
+const UserImage = styled.img`
+  height: 40px;
+  border-radius: 20px;
+  margin: 0 10px;
+`;
+
+const PtContainer = styled.span`
+  float: right;
+  transform: translateY(50%);
+`;
 
 class Scores extends Component {
   static propTypes = {
@@ -45,11 +57,9 @@ class Scores extends Component {
             bsStyle={loggedUserId === score.get('userId') ? 'info' : 'default'}
           >
             {this.renderPosition(index + 1)}
-            {/* <img src={userPicture} /> */}
+            <UserImage src={userPicture} />
             {` ${score.get('name')}`}
-            <span style={{ float: 'right' }}>
-              {`${score.get('score')} pt.`}
-            </span>
+            <PtContainer>{`${score.get('score')} pt.`}</PtContainer>
           </ListGroupItem>
         ))}
       </ListGroup>
