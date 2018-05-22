@@ -57,6 +57,8 @@ class Question extends Component {
     this.props.postAnswer(payload);
   }
 
+  filterAnswer = answer => answer.get('text')
+
   render() {
     const {
       currentQuestion,
@@ -83,7 +85,7 @@ class Question extends Component {
           />
           <p>{renderHTML(text)}</p>
         </PanelStyled>
-        {answers.map(answer => (
+        {answers.filter(this.filterAnswer).map(answer => (
           <Answer
             key={answer.get('id')}
             questionId={questionId}
