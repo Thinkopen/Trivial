@@ -17,7 +17,7 @@ class LoginContainer extends Component {
 
     return (
       <FacebookLogin
-        autoLoad
+        autoLoad={false}
         appId={facebookClientId}
         fields="name,email,picture"
         icon="fa-facebook"
