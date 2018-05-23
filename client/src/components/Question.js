@@ -67,6 +67,7 @@ class Question extends Component {
       timeoutQuestion,
       isAdmin,
     } = this.props;
+    const { answered } = this.state;
     const questionId = currentQuestion.get('id');
     const text = currentQuestion.get('text').replace(/\\n/g, '<br/>');
     const answers = currentQuestion.get('answers');
@@ -85,13 +86,14 @@ class Question extends Component {
           />
           <p>{renderHTML(text)}</p>
         </PanelStyled>
+        {answered && <p>{'Aspetta che tutti abbiano risposto'}</p>}
         {answers.filter(this.filterAnswer).map(answer => (
           <Answer
             key={answer.get('id')}
             questionId={questionId}
             answer={answer}
             postAnswer={this.postAnswer}
-            readOnly={isAdmin || this.state.answered}
+            readOnly={isAdmin || answered}
           />
         ))}
       </div>

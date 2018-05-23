@@ -27,7 +27,7 @@
   },
 
   "quiz": {
-    "nextQuestionTimeout": 45000,
+    "nextQuestionTimeout": 20000,
     "questionsCount": 10
   },
 
