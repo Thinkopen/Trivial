@@ -62,7 +62,7 @@ class LoggedContainer extends Component {
       <div key="loading">
         <Well>
           {`10 domande
-          30 secondi per rispondere
+          20 secondi per rispondere
           fino a 20 concorrenti per match`}
           <br />
           <br />

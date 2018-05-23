@@ -5,7 +5,7 @@ import CircularProgressbar from 'react-circular-progressbar';
 
 import 'react-circular-progressbar/dist/styles.css';
 
-const limitAlert = 15;
+const limitAlert = 5;
 const red = '#b53737';
 const blue = '#377BB5';
 
