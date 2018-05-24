@@ -5,25 +5,16 @@ import CircularProgressbar from 'react-circular-progressbar';
 
 import 'react-circular-progressbar/dist/styles.css';
 
+const limitAlert = 5;
+const red = '#b53737';
+const blue = '#377BB5';
+
 const ProgressbarContainer = styled.div`
   width: 30px;
   position: absolute;
   top: 35px;
   right: 40px;
 `;
-
-const progressbarStyle = {
-  text: {
-    fontSize: '2.9em',
-    fill: '#377BB5',
-  },
-  path: {
-    stroke: '#377BB5',
-  },
-  trail: {
-    stroke: 'white',
-  },
-};
 
 class Countdown extends Component {
   static propTypes = {
@@ -53,6 +44,21 @@ class Countdown extends Component {
     clearInterval(this.countdown);
   }
 
+  getMainColor = countdown => countdown <= limitAlert ? red : blue
+
+  getProgressbarStyle = countdown => ({
+    text: {
+      fontSize: '2.9em',
+      fill: this.getMainColor(countdown),
+    },
+    path: {
+      stroke: this.getMainColor(countdown),
+    },
+    trail: {
+      stroke: 'white',
+    },
+  });
+
   render() {
     const { state: { countdown }, props: { timeout } } = this;
     const percentage = countdown / (timeout / 1000) * 100;
@@ -65,7 +71,7 @@ class Countdown extends Component {
           counterClockwise={false}
           strokeWidth={12}
           initialAnimation
-          styles={progressbarStyle}
+          styles={this.getProgressbarStyle(countdown)}
         />
       </ProgressbarContainer>
     );

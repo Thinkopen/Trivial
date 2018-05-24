@@ -189,7 +189,6 @@ describe('Functional -> Quiz', () => {
   }
 
   let roomN1;
-  let roomN2;
 
   test('it should do the entire quiz', () => requestActiveRoom()
     .then(room => new Promise((resolve, reject) => {

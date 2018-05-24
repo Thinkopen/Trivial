@@ -11,15 +11,14 @@ const podiumColors = {
   3: '#cb7f3b',
 }
 
-const UserImage = styled.img`
-  height: 40px;
-  border-radius: 20px;
-  margin: 0 10px;
-`;
+// const UserImage = styled.img`
+//   height: 40px;
+//   border-radius: 20px;
+//   margin: 0 10px;
+// `;
 
 const PtContainer = styled.span`
   float: right;
-  transform: translateY(50%);
 `;
 
 class Scores extends Component {
@@ -43,7 +42,8 @@ class Scores extends Component {
   }
 
   render() {
-    const { loggedUserId, userPicture, scores } = this.props;
+    // const { loggedUserId, userPicture, scores } = this.props;
+    const { loggedUserId, scores } = this.props;
 
     return [
       <h2 key="title" className="title">{"Scores"}</h2>,
@@ -57,7 +57,7 @@ class Scores extends Component {
             bsStyle={loggedUserId === score.get('userId') ? 'info' : 'default'}
           >
             {this.renderPosition(index + 1)}
-            <UserImage src={userPicture} />
+            {/* <UserImage src={userPicture} /> */}
             {` ${score.get('name')}`}
             <PtContainer>{`${score.get('score')} pt.`}</PtContainer>
           </ListGroupItem>
