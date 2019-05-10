@@ -1,5 +1,10 @@
 {
   "server": {
     "port": 3000
+  },
+
+  "log": {
+    "level": "silly",
+    "silent": false
   }
 }
