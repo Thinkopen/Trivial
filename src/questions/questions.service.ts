@@ -17,4 +17,10 @@ export class QuestionsService {
   async findOne(id: string): Promise<Question> {
     return this.questionRepository.findOne(id, { relations: ['answers'] });
   }
+
+  async destroy(id: string): Promise<void> {
+    const question = await this.findOne(id);
+
+    await this.questionRepository.remove(question);
+  }
 }

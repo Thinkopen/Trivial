@@ -17,7 +17,7 @@ export class QuestionsController {
 
   @Delete(':id')
   async destroy(@Param('id') id: string) {
-
+    return this.questionsService.destroy(id);
   }
 
   @Post('import')
