@@ -2,8 +2,9 @@ import { LoggerService as NestLoggerService } from '@nestjs/common';
 
 import * as winston from 'winston';
 import { config } from 'node-config-ts';
+import { Logger, QueryRunner } from 'typeorm';
 
-export class LoggerService implements NestLoggerService {
+export class LoggerService implements NestLoggerService, Logger {
   private readonly logger: winston.Logger;
 
   constructor(label: string) {
@@ -77,5 +78,25 @@ export class LoggerService implements NestLoggerService {
 
   verboseMeta(message: any, meta?: any): void {
     this.logger.verbose(message, meta);
+  }
+
+  logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): void {
+    this.debugMeta(query, { parameters });
+  }
+
+  logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner): void {
+    this.errorMeta(error, undefined, { query, parameters });
+  }
+
+  logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner): void {
+    this.logMeta(`[SLOW QUERY: ${time}] ${query}`, { parameters, time });
+  }
+
+  logMigration(message: string, queryRunner?: QueryRunner): void {
+    this.verbose(message);
+  }
+
+  logSchemaBuild(message: string, queryRunner?: QueryRunner): void {
+    this.verbose(message);
   }
 }

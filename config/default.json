@@ -6,5 +6,10 @@
   "log": {
     "level": "silly",
     "silent": false
+  },
+
+  "database": {
+    "type": "postgres",
+    "url": "@@DATABASE_URL"
   }
 }

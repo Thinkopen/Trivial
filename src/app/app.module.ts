@@ -1,8 +1,13 @@
-import { AxiosRequestConfig } from 'axios';
 import { HttpModule, HttpService, Module, OnModuleInit } from '@nestjs/common';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { AxiosRequestConfig } from 'axios';
+import { config } from 'node-config-ts';
 
 import { LoggerService } from '../shared/utils/logger.service';
+
+import { QuestionsModule } from '../questions/questions.module';
 
 type AxiosRequestConfigWithStartTimeAndId = AxiosRequestConfig & {
   startTime: [number, number];
@@ -10,7 +15,18 @@ type AxiosRequestConfigWithStartTimeAndId = AxiosRequestConfig & {
 };
 
 @Module({
-  imports: [HttpModule],
+  imports: [
+    HttpModule,
+    TypeOrmModule.forRoot({
+      entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
+      logging: 'all',
+      logger: new LoggerService('Database'),
+
+      ...config.database,
+    }),
+
+    QuestionsModule,
+  ],
 })
 export class AppModule implements OnModuleInit {
   private readonly loggerHttp: LoggerService = new LoggerService('http');
