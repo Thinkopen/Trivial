@@ -12,7 +12,7 @@ export class QuestionsController {
 
   @Get(':id')
   async retrieve(@Param('id') id: string) {
-
+    return this.questionsService.findOne(id);
   }
 
   @Delete(':id')

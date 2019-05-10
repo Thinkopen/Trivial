@@ -10,7 +10,11 @@ export class QuestionsService {
     private readonly questionRepository: Repository<Question>,
   ) {}
 
-  findAll(): Promise<Question[]> {
+  async findAll(): Promise<Question[]> {
     return this.questionRepository.find({ relations: ['answers'] });
+  }
+
+  async findOne(id: string): Promise<Question> {
+    return this.questionRepository.findOne(id, { relations: ['answers'] });
   }
 }
