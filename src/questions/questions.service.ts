@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Question } from './entities/question.entity';
+
 import { Repository } from 'typeorm';
+import * as parse from 'csv-parse/lib/sync';
+
+import { Question } from './entities/question.entity';
+import { Answer } from './entities/answer.entity';
 
 @Injectable()
 export class QuestionsService {
@@ -22,5 +26,30 @@ export class QuestionsService {
     const question = await this.findOne(id);
 
     await this.questionRepository.remove(question);
+  }
+
+  async importFromCsv(csv: string): Promise<Question[]> {
+    const questionsArr = parse(csv, { rtrim: true, relax_column_count: true });
+
+    return this.importFromArray(questionsArr);
+  }
+
+  async importFromArray(questions: string[][]): Promise<Question[]> {
+    return Promise.all(questions.map(async ([questionText, correctAnswerText, ...wrongAnswerTexts]) => {
+      const question = this.questionRepository.create({ text: questionText, answers: [] });
+
+      const correctAnswer = new Answer();
+      correctAnswer.text = correctAnswerText;
+      correctAnswer.correct = true;
+      question.answers.push(correctAnswer);
+
+      wrongAnswerTexts.map((wrongAnswerText) => {
+        const wrongAnswer = new Answer();
+        wrongAnswer.text = wrongAnswerText;
+        question.answers.push(wrongAnswer);
+      });
+
+      return this.questionRepository.save(question);
+    }));
   }
 }
