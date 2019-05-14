@@ -16,7 +16,7 @@ import { Question } from './entities/question.entity';
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
-  @Get('/')
+  @Get()
   @ApiOperation({ title: 'Questions list', description: 'Retrieves the complete list of questions (with their answers)'})
   @ApiOkResponse({ description: 'All the questions (with answers)', isArray: true, type: Question })
   async list(): Promise<Question[]> {

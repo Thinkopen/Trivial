@@ -8,6 +8,7 @@ import { config } from 'node-config-ts';
 import { LoggerService } from '../shared/utils/logger.service';
 
 import { QuestionsModule } from '../questions/questions.module';
+import { UsersModule } from '../users/users.module';
 
 type AxiosRequestConfigWithStartTimeAndId = AxiosRequestConfig & {
   startTime: [number, number];
@@ -26,6 +27,7 @@ type AxiosRequestConfigWithStartTimeAndId = AxiosRequestConfig & {
     }),
 
     QuestionsModule,
+    UsersModule,
   ],
 })
 export class AppModule implements OnModuleInit {
