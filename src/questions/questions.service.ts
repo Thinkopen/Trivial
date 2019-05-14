@@ -18,6 +18,10 @@ export class QuestionsService {
     return this.questionRepository.find({ relations: ['answers'] });
   }
 
+  async count(): Promise<number> {
+    return this.questionRepository.count();
+  }
+
   async findOne(id: string): Promise<Question> {
     return this.questionRepository.findOne(id, { relations: ['answers'] });
   }

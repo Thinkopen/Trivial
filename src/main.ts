@@ -17,6 +17,7 @@ async function bootstrap() {
     .setDescription('An easy game to entertain at open days')
     .setVersion('1.0')
     .addTag('questions')
+    .addTag('settings')
     .addTag('users')
     .build();
   const document = SwaggerModule.createDocument(app, options);

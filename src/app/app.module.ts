@@ -4,10 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AxiosRequestConfig } from 'axios';
 import { config } from 'node-config-ts';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 import { LoggerService } from '../shared/utils/logger.service';
 
 import { QuestionsModule } from '../questions/questions.module';
+import { SettingsModule } from '../settings/settings.module';
 import { UsersModule } from '../users/users.module';
 
 type AxiosRequestConfigWithStartTimeAndId = AxiosRequestConfig & {
@@ -23,10 +25,11 @@ type AxiosRequestConfigWithStartTimeAndId = AxiosRequestConfig & {
       logging: 'all',
       logger: new LoggerService('Database'),
 
-      ...config.database,
+      ...config.database as PostgresConnectionOptions,
     }),
 
     QuestionsModule,
+    SettingsModule,
     UsersModule,
   ],
 })
