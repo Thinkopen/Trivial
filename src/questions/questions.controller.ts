@@ -17,7 +17,7 @@ export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
   @Get()
-  @ApiOperation({ title: 'Questions list', description: 'Retrieves the complete list of questions (with their answers)'})
+  @ApiOperation({ title: 'Questions list', description: 'Retrieves the complete list of questions (with their answers)' })
   @ApiOkResponse({ description: 'All the questions (with answers)', isArray: true, type: Question })
   async list(): Promise<Question[]> {
     return this.questionsService.findAll();
