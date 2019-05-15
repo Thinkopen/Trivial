@@ -8,6 +8,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 
 import { LoggerService } from '../shared/utils/logger.service';
 
+import { AuthenticationModule } from '../authentication/authentication.module';
 import { QuestionsModule } from '../questions/questions.module';
 import { SettingsModule } from '../settings/settings.module';
 import { UsersModule } from '../users/users.module';
@@ -28,6 +29,7 @@ type AxiosRequestConfigWithStartTimeAndId = AxiosRequestConfig & {
       ...config.database as PostgresConnectionOptions,
     }),
 
+    AuthenticationModule,
     QuestionsModule,
     SettingsModule,
     UsersModule,

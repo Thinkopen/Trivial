@@ -15,4 +15,19 @@ export class UsersService {
   async list(): Promise<User[]> {
     return this.userRepository.find();
   }
+
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({ email });
+  }
+
+  async upsertByEmail(email: string, userRaw: Partial<User>): Promise<User> {
+    const foundUser = (await this.findByEmail(email)) || new User();
+
+    Object.keys(userRaw)
+      .forEach((field) => {
+        foundUser[field] = userRaw[field];
+      });
+
+    return this.userRepository.save(foundUser);
+  }
 }
